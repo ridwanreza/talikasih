@@ -20,10 +20,11 @@ import MyCampaign from '../screens/MyCampaign';
 import CampaignDetails from '../screens/CampaignDetails';
 import CampaignDonate from '../screens/CampaignDonate';
 import FundraiseUpdate from '../screens/FundraiseUpdate';
+import {connect} from 'react-redux';
 
 const Stack = createStackNavigator();
 
-const AppStack = () => {
+const AppStack = props => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -101,7 +102,7 @@ const AppStack = () => {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: 'My Donations',
+          headerTitle: `My Donations (${props.dataMyDonation.length})`,
           headerTitleStyle: {fontFamily: 'Nunito-Bold', color: '#000000'},
         }}
         name="My Donation"
@@ -110,7 +111,7 @@ const AppStack = () => {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: 'My Campaign',
+          headerTitle: `My Campaign (${props.dataCampaign.length})`,
           headerTitleStyle: {fontFamily: 'Nunito-Bold', color: '#000000'},
         }}
         name="My Campaign"
@@ -157,7 +158,12 @@ const AppStack = () => {
   );
 };
 
-export default AppStack;
+const reduxState = state => ({
+  dataCampaign: state.taliKasih.dataCampaign,
+  dataMyDonation: state.taliKasih.dataMyDonation,
+});
+
+export default connect(reduxState, null)(AppStack);
 
 const styles = StyleSheet.create({
   headerContainer: {

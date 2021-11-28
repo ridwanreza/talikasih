@@ -95,8 +95,12 @@ function* searchCampaign(action) {
   }
 }
 
-function* setRenderEvent(action) {
+function* setRenderType(action) {
   yield put({type: 'RENDER_TYPE_SUCCESS', data: action.data});
+}
+
+function* setFilter(action) {
+  yield put({type: 'FILTER_SUCCESS', data: action.data});
 }
 
 function* taliKasihSaga() {
@@ -104,7 +108,8 @@ function* taliKasihSaga() {
   yield takeLatest('GET_CAMPAIGN_DETAIL', getCampaignDetail);
   yield takeLatest('GET_CAMPAIGN_DETAIL_COMMENT', getCampaignDetailComment);
   yield takeLatest('SEARCH_CAMPAIGN', searchCampaign);
-  yield takeLatest('RENDER_TYPE', setRenderEvent);
+  yield takeLatest('RENDER_TYPE', setRenderType);
+  yield takeLatest('FILTER', setFilter);
 }
 
 export default taliKasihSaga;
