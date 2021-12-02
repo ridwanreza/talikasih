@@ -8,7 +8,7 @@ import {
 import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from '../screens/Home';
-import CampaignDetails from '../screens/CampaignDetails';
+import FundraiseUpdate from '../screens/FundraiseUpdate';
 import CreateCampaign from '../screens/CreateCampaign';
 import Profile from '../screens/Profile';
 import More from '../screens/More';
@@ -68,7 +68,7 @@ const AppBottomTabs = () => {
           },
         }}
         name="Donate"
-        component={CampaignDetails}
+        component={Home}
       />
       <Tab.Screen
         options={{
