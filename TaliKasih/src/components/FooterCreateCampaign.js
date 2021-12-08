@@ -4,16 +4,24 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {connect} from 'react-redux';
 
 const FooterButton = props => {
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => {
-        if (!props.data) {
+        if (
+          !props.data.image ||
+          !props.data.title ||
+          !props.data.goal ||
+          !props.data.dueDate ||
+          !props.data.story ||
+          !props.data.categoryId
+        ) {
           Alert.alert('TaliKasih', 'Please fill the required data above!');
         } else if (props.data) {
-          props.navigation.navigate('Main', {screen: 'Donate'});
+          props.createCampaign(props.data, props.navigation);
         }
       }}>
       <Text style={styles.buttonText}>{props.name}</Text>
@@ -21,7 +29,12 @@ const FooterButton = props => {
   );
 };
 
-export default FooterButton;
+const reduxDispatch = dispatch => ({
+  createCampaign: (a, b) =>
+    dispatch({type: 'CREATE_CAMPAIGN', data: a, navigation: b}),
+});
+
+export default connect(null, reduxDispatch)(FooterButton);
 
 const styles = StyleSheet.create({
   container: {

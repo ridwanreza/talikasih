@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -13,7 +13,15 @@ const FooterCampaignDetail = props => {
         <Feather name="share" style={styles.shareIcon} />
         <Text style={styles.shareText}>SHARE</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => {
+          if (props.token === null) {
+            Alert.alert('TaliKasih', 'Please login or sign up first!');
+          } else if (props.token !== null) {
+            props.navigation.navigate('Campaign Donate');
+          }
+        }}>
         <Text style={styles.buttonText}>DONATE</Text>
       </TouchableOpacity>
     </View>

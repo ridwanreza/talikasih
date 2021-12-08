@@ -145,10 +145,6 @@ const reduxState = state => ({
   token: state.auth.token,
 });
 
-const reduxDispatch = dispatch => ({
-  getToken: () => dispatch({type: 'GET_TOKEN'}),
-});
-
 export default connect(reduxState, null)(AppBottomTabs);
 
 const styles = StyleSheet.create({

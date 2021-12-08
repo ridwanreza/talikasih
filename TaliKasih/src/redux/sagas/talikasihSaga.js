@@ -183,12 +183,65 @@ function* filterCampaign(action) {
   }
 }
 
-function* setRenderType(action) {
-  yield put({type: 'RENDER_TYPE_SUCCESS', data: action.data});
-}
-
 function* setFilter(action) {
   yield put({type: 'FILTER_SUCCESS', data: action.data});
+}
+
+function* createCampaign(action) {
+  try {
+    console.log(action.data);
+    const token = yield getToken();
+
+    const resCampaign = yield axios({
+      method: 'POST',
+      url: `https://api-talikasih.herokuapp.com/campaign`,
+      headers: {
+        access_token: token,
+      },
+      data: action.data,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'CREATE_CAMPAIGN_SUCCESS',
+        data: resCampaign.data.data,
+        error: null,
+      });
+      action.navigation.navigate('Main', {screen: 'Donate'});
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'CREATE_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+function* createComment(action) {
+  try {
+    const token = yield getToken();
+
+    const resCampaign = yield axios({
+      method: 'POST',
+      url: `https://api-talikasih.herokuapp.com/comment/${action.value}`,
+      headers: {
+        access_token: token,
+      },
+      data: action.data,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'CREATE_COMMENT_SUCCESS',
+        data: resCampaign.data.data,
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'CREATE_COMMENT_FAILED',
+      error: err.response.data.errors,
+    });
+  }
 }
 
 function* taliKasihSaga() {
@@ -199,8 +252,9 @@ function* taliKasihSaga() {
   yield takeLatest('GET_MY_DONATION', getMyDonation);
   yield takeLatest('SEARCH_CAMPAIGN', searchCampaign);
   yield takeLatest('FILTER_CAMPAIGN', filterCampaign);
-  yield takeLatest('RENDER_TYPE', setRenderType);
   yield takeLatest('FILTER', setFilter);
+  yield takeLatest('CREATE_CAMPAIGN', createCampaign);
+  yield takeLatest('CREATE_COMMENT', createComment);
 }
 
 export default taliKasihSaga;

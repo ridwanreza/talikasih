@@ -17,6 +17,7 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false,
         token: action.token,
+        error: action.error,
       };
     case 'REGISTER_FAILED':
       return {
@@ -34,6 +35,7 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false,
         token: action.token,
+        error: action.error,
       };
     case 'LOGIN_FAILED':
       return {
@@ -79,6 +81,13 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataUser: action.data,
+        error: action.error,
+      };
+    case 'GET_USER_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
       };
     case 'UPDATE_USER':
       return {
@@ -90,6 +99,7 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataUser: action.data,
+        error: action.error,
       };
     case 'UPDATE_USER_FAILED':
       return {

@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -24,11 +25,17 @@ import {connect} from 'react-redux';
 
 const CampaignDetails = props => {
   const [comment, setComment] = useState();
+  const [id, setId] = useState();
 
   useEffect(() => {
     props.getCampaignDetail(props.route.params.campaignId);
+    setId(props.route.params.campaignId);
     //props.getRelatedCampaign(props.route.params.campaignId);
-  }, []);
+  }, [props.dataMyComment]);
+
+  const dataComment = {
+    comment: comment,
+  };
 
   if (props.loading === true) {
     return (
@@ -103,7 +110,15 @@ const CampaignDetails = props => {
             value={comment}
             onChangeText={value => setComment(value)}
           />
-          <TouchableOpacity style={styles.postButton}>
+          <TouchableOpacity
+            style={styles.postButton}
+            onPress={() => {
+              if (props.token !== null) {
+                props.createComment(dataComment, id);
+              } else if (props.token === null) {
+                Alert.alert('TaliKasih', 'Please login or sign up first!');
+              }
+            }}>
             <Text style={styles.postButtonText}>POST</Text>
           </TouchableOpacity>
           {props.detailComments.map((item, index) => (
@@ -130,7 +145,7 @@ const CampaignDetails = props => {
           />
         </View>
       </ScrollView>
-      <Footer />
+      <Footer navigation={props.navigation} token={props.token} />
     </View>
   );
 };
@@ -142,12 +157,16 @@ const reduxState = state => ({
   detailComments: state.taliKasih.dataComment,
   dataRelated: state.taliKasih.dataRelated,
   dataRemainingTime: state.taliKasih.dataRemainingTime,
+  dataMyComment: state.taliKasih.dataMyComment,
   loading: state.taliKasih.isLoading,
+  token: state.auth.token,
 });
 
 const reduxDispatch = dispatch => ({
   getCampaignDetail: a => dispatch({type: 'GET_CAMPAIGN_DETAIL', value: a}),
   getRelatedCampaign: b => dispatch({type: 'GET_RELATED_CAMPAIGN', value: b}),
+  createComment: (c, d) =>
+    dispatch({type: 'CREATE_COMMENT', data: c, value: d}),
 });
 
 export default connect(reduxState, reduxDispatch)(CampaignDetails);

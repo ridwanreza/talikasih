@@ -15,6 +15,7 @@ import {
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import defaultProfile from '../assets/images/defaultProfile.png';
+import Auth from '../components/Auth';
 import {connect} from 'react-redux';
 
 const Profile = props => {
@@ -23,17 +24,11 @@ const Profile = props => {
       props.getUser();
       props.getMyCampaign();
       props.getMyDonation();
-    } else if (props.token === null) {
-      props.navigation.navigate('Login');
     }
   }, [props.token]);
 
   if (props.token === null) {
-    return (
-      <View>
-        <Text>Please sign up or sign in first</Text>
-      </View>
-    );
+    return <Auth navigation={props.navigation} />;
   } else if (props.userLoad === true || props.loading === true) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

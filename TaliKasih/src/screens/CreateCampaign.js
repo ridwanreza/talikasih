@@ -19,6 +19,7 @@ import moment from 'moment';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import Footer from '../components/FooterCreateCampaign';
+import Auth from '../components/Auth';
 import {connect} from 'react-redux';
 
 const dataCategory = [
@@ -40,6 +41,8 @@ const CreateCampaign = props => {
   const [pickDate, setPickDate] = useState();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [story, setStory] = useState();
+  const [rawImage, setRawImage] = useState();
+  const [categoryId, setCategoryId] = useState();
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -51,13 +54,13 @@ const CreateCampaign = props => {
 
   const handleConfirm = datetime => {
     hideDatePicker();
-    setPickDate(moment(datetime).format('DD MMMM YYYY'));
+    setPickDate(moment(datetime).format('YYYY/MM/DD'));
   };
 
   const option = {
     title: 'Select Poster',
-    StorageOption: {
-      skipBackup: false,
+    storageOptions: {
+      skipBackup: true,
       path: 'images',
     },
   };
@@ -71,7 +74,8 @@ const CreateCampaign = props => {
           name: response.assets[0].fileName,
         };
         console.log(source);
-        setImg(response.assets[0].uri);
+        setImg(source.uri);
+        setRawImage(source.uri);
       } else {
         console.log(response);
       }
@@ -79,26 +83,25 @@ const CreateCampaign = props => {
   }
 
   const dataCampaign = {
-    poster: img,
+    image: rawImage,
     title: title,
-    category: category,
     goal: goal,
     dueDate: pickDate,
     story: story,
+    categoryId: categoryId,
   };
 
-  useEffect(() => {
-    if (props.token === null) {
-      props.navigation.navigate('Login');
-    }
-  }, [props.token]);
+  // useEffect(() => {
+  //   if (props.token === null) {
+  //     props.navigation.navigate('Login');
+  //   }
+  // }, [props.token]);
+
+  console.log(props.error);
+  console.log(rawImage);
 
   if (props.token === null) {
-    return (
-      <View>
-        <Text>Please sign up or sign in first</Text>
-      </View>
-    );
+    return <Auth navigation={props.navigation} />;
   } else {
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -142,6 +145,7 @@ const CreateCampaign = props => {
             data={dataCategory}
             onSelect={(selectedItem, index) => {
               setCategory(selectedItem.name);
+              setCategoryId(selectedItem.id_category);
             }}
             buttonTextAfterSelection={(selectedItem, index) => {
               return selectedItem.name;
@@ -202,7 +206,7 @@ const CreateCampaign = props => {
             onChangeText={value => setStory(value)}
           />
           <Footer
-            name={'CREATE CAMPAIGN'}
+            name={props.loading === true ? 'Loading...' : 'CREATE CAMPAIGN'}
             data={dataCampaign}
             navigation={props.navigation}
           />
@@ -214,6 +218,8 @@ const CreateCampaign = props => {
 
 const reduxState = state => ({
   token: state.auth.token,
+  loading: state.taliKasih.isLoading,
+  error: state.taliKasih.error,
 });
 
 export default connect(reduxState, null)(CreateCampaign);

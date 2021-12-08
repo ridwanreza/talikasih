@@ -49,7 +49,11 @@ function* register(action) {
 
     if (resRegister && resRegister.data) {
       yield storeToken(resRegister.data.token);
-      yield put({type: 'REGISTER_SUCCESS', token: resRegister.data.token});
+      yield put({
+        type: 'REGISTER_SUCCESS',
+        token: resRegister.data.token,
+        error: null,
+      });
       action.navigation.navigate('Main', {screen: 'Donate'});
     }
   } catch (err) {
@@ -70,7 +74,11 @@ function* login(action) {
 
     if (resLogin && resLogin.data) {
       yield storeToken(resLogin.data.token);
-      yield put({type: 'LOGIN_SUCCESS', token: resLogin.data.token});
+      yield put({
+        type: 'LOGIN_SUCCESS',
+        token: resLogin.data.token,
+        error: null,
+      });
       action.navigation.navigate('Main', {screen: 'Donate'});
     }
   } catch (err) {
@@ -118,10 +126,15 @@ function* getUser() {
       },
     });
     if (resUser && resUser.data) {
-      yield put({type: 'GET_USER_SUCCESS', data: resUser.data.data});
+      yield put({
+        type: 'GET_USER_SUCCESS',
+        data: resUser.data.data,
+        error: null,
+      });
     }
   } catch (err) {
     console.log(err);
+    yield put({type: 'GET_USER_FAILED', error: err.response.data.errors});
   }
 }
 
@@ -138,7 +151,11 @@ function* updateUser(action) {
       data: action.data,
     });
     if (resUser && resUser.data) {
-      yield put({type: 'UPDATE_USER_SUCCESS', data: resUser.data.data});
+      yield put({
+        type: 'UPDATE_USER_SUCCESS',
+        data: resUser.data.data,
+        error: null,
+      });
       action.navigation.navigate('Main', {screen: 'My Account'});
       console.log(resUser.data.data);
     }

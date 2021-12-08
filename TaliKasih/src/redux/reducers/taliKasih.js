@@ -42,8 +42,9 @@ const initialState = {
   dataMyDonation: [],
   dataSearch: [],
   dataFilter: [],
-  renderType: '',
   filter: '',
+  dataCampaign: [],
+  dataMyComment: [],
   error: null,
   isLoading: false,
 };
@@ -62,6 +63,7 @@ const taliKasih = (state = initialState, action) => {
         dataNewest: action.dataNewest,
         dataUrgent: action.dataUrgent,
         dataGainedMomentum: action.dataGainedMomentum,
+        error: action.error,
       };
     case 'GET_CAMPAIGN_FAILED':
       return {
@@ -83,6 +85,7 @@ const taliKasih = (state = initialState, action) => {
         dataComment: action.comment,
         dataRelated: action.related,
         dataRemainingTime: action.remainingTime,
+        error: action.error,
       };
     case 'GET_CAMPAIGN_DETAIL_FAILED':
       return {
@@ -100,6 +103,7 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataRelated: action.related,
+        error: action.error,
       };
     case 'GET_RELATED_CAMPAIGN_FAILED':
       return {
@@ -117,6 +121,7 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataMyCampaign: action.data,
+        error: action.error,
       };
     case 'GET_MY_CAMPAIGN_FAILED':
       return {
@@ -134,6 +139,7 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataMyDonation: action.data,
+        error: action.error,
       };
     case 'GET_MY_DONATION_FAILED':
       return {
@@ -169,23 +175,13 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataFilter: action.data,
+        error: action.error,
       };
     case 'FILTER_CAMPAIGN_FAILED':
       return {
         ...state,
         isLoading: false,
         error: action.error,
-      };
-    case 'RENDER_TYPE':
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case 'RENDER_TYPE_SUCCESS':
-      return {
-        ...state,
-        isLoading: false,
-        renderType: action.data,
       };
     case 'FILTER':
       return {
@@ -197,6 +193,42 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         filter: action.data,
+      };
+    case 'CREATE_CAMPAIGN':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'CREATE_CAMPAIGN_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dataCampaign: action.data,
+        error: action.error,
+      };
+    case 'CREATE_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'CREATE_COMMENT':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'CREATE_COMMENT_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dataMyComment: action.data,
+        error: action.error,
+      };
+    case 'CREATE_COMMENT_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
       };
     default:
       return state;

@@ -73,6 +73,7 @@ const EditProfile = props => {
   };
 
   console.log(rawImage);
+  console.log(props.error);
 
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
@@ -159,7 +160,7 @@ const EditProfile = props => {
         </View>
       </ScrollView>
       <Footer
-        name={'SAVE CHANGES'}
+        name={props.loading === true ? 'Loading...' : 'SAVE CHANGES'}
         data={resetPass ? dataProfileFull : dataProfile}
         navigation={props.navigation}
       />
@@ -170,6 +171,7 @@ const EditProfile = props => {
 const reduxState = state => ({
   dataUser: state.auth.dataUser,
   error: state.auth.error,
+  loading: state.auth.isLoading,
 });
 
 export default connect(reduxState, null)(EditProfile);
