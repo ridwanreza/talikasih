@@ -13,7 +13,6 @@ import SignUp from '../screens/SignUp';
 import Login from '../screens/Login';
 import FilterSort from '../screens/FilterSort';
 import Explore from '../screens/Explore';
-import EditCampaign from '../screens/EditCampaign';
 import EditProfile from '../screens/EditProfile';
 import MyDonation from '../screens/MyDonation';
 import MyCampaign from '../screens/MyCampaign';
@@ -74,25 +73,6 @@ const AppStack = props => {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerLeft: null,
-          header: props => {
-            return (
-              <View style={styles.headerContainer}>
-                <Image source={LogoHeader} style={styles.logo} />
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate('Explore')}>
-                  <Ionicons name="search" size={hp('3.5%')} color="#1D94A8" />
-                </TouchableOpacity>
-              </View>
-            );
-          },
-        }}
-        name="Edit Campaign"
-        component={EditCampaign}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: true,
           headerTitle: 'Edit Profile',
           headerTitleStyle: {fontFamily: 'Nunito-Bold', color: '#000000'},
         }}
@@ -111,7 +91,7 @@ const AppStack = props => {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: `My Campaign (${props.dataCampaign.length})`,
+          headerTitle: `My Campaign (${props.dataMyCampaign.length})`,
           headerTitleStyle: {fontFamily: 'Nunito-Bold', color: '#000000'},
         }}
         name="My Campaign"
@@ -159,7 +139,7 @@ const AppStack = props => {
 };
 
 const reduxState = state => ({
-  dataCampaign: state.taliKasih.dataCampaign,
+  dataMyCampaign: state.taliKasih.dataMyCampaign,
   dataMyDonation: state.taliKasih.dataMyDonation,
 });
 

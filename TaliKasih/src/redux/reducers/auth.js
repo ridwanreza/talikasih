@@ -1,6 +1,7 @@
 const initialState = {
   isLoading: false,
   dataUser: [],
+  error: null,
   token: null,
 };
 
@@ -15,6 +16,13 @@ const auth = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        token: action.token,
+      };
+    case 'REGISTER_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
       };
     case 'LOGIN':
       return {
@@ -27,6 +35,12 @@ const auth = (state = initialState, action) => {
         isLoading: false,
         token: action.token,
       };
+    case 'LOGIN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
     case 'LOGOUT':
       return {
         ...state,
@@ -35,6 +49,24 @@ const auth = (state = initialState, action) => {
     case 'LOGOUT_SUCCESS':
       return {
         ...state,
+        isLoading: false,
+        token: action.token,
+      };
+    case 'GET_TOKEN':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'GET_TOKEN_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        token: action.token,
+      };
+    case 'GET_TOKEN_NULL':
+      return {
+        ...state,
+        isLoading: false,
         token: action.token,
       };
     case 'GET_USER':
@@ -58,6 +90,12 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataUser: action.data,
+      };
+    case 'UPDATE_USER_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
       };
     default:
       return state;

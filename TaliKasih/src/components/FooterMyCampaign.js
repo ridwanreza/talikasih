@@ -5,10 +5,13 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const FooterMyCampaign = () => {
+const FooterMyCampaign = props => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          props.navigation.navigate('Main', {screen: 'Create Campaign'})
+        }>
         <Text style={styles.buttonText}>CREATE NEW CAMPAIGN</Text>
       </TouchableOpacity>
     </View>

@@ -1,99 +1,50 @@
-import defaultPoster from '../../assets/images/defaultPoster.png';
-
 const initialState = {
-  dataCampaign: [
+  dataCampaignDetailUpdates: [
     {
       id: 1,
-      title: 'Aid for necessary items to help our country',
-      category: 'Medical',
-      keyword: 'Aksi Cepat Tanggap',
-      raised: 30000000,
-      goal: 50000000,
-      img: defaultPoster,
+      date: 'TODAY',
+      updateCat: 'Non-Withdrawal',
+      story:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. Sagittis quisque non, nullam facilisis. ',
     },
     {
       id: 2,
-      title: 'Aid for necessary items to help our country',
-      category: 'Medical',
-      keyword: 'Aksi Cepat Tanggap',
-      raised: 30000000,
-      goal: 50000000,
-      img: defaultPoster,
+      date: 'YESTERDAY',
+      updateCat: 'Withdrawal',
+      amount: 20000000,
+      story: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
     },
     {
       id: 3,
-      title: 'Aid for necessary items to help our country',
-      category: 'Medical',
-      keyword: 'Aksi Cepat Tanggap',
-      raised: 30000000,
-      goal: 50000000,
-      img: defaultPoster,
+      date: '3 Oktober 2020',
+      updateCat: 'Withdrawal',
+      amount: 20000000,
+      story: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
     },
     {
       id: 4,
-      title: 'Aid for necessary items to help our country',
-      category: 'Medical',
-      keyword: 'Aksi Cepat Tanggap',
-      raised: 30000000,
-      goal: 50000000,
-      img: defaultPoster,
+      date: '30 September 2020',
+      updateCat: 'Non-Withdrawal',
+      story:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. Sagittis quisque non, nullam facilisis. ',
     },
   ],
-  dataMyDonation: [
-    {
-      id_user: 1,
-      title: 'Aid for necessary items to help our country',
-      donation: 320000,
-      message:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. In faucibus leo etiam cras elit malesuada augue',
-      time: '12 minutes ago',
-    },
-    {
-      id_user: 1,
-      title: 'Aid for necessary items to help our country',
-      donation: 320000,
-      message:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. In faucibus leo etiam cras elit malesuada augue',
-      time: '12 minutes ago',
-    },
-    {
-      id_user: 1,
-      title: 'Aid for necessary items to help our country',
-      donation: 320000,
-      message:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. In faucibus leo etiam cras elit malesuada augue',
-      time: '12 minutes ago',
-    },
-    {
-      id_user: 1,
-      title: 'Aid for necessary items to help our country',
-      donation: 320000,
-      message:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. In faucibus leo etiam cras elit malesuada augue',
-      time: '12 minutes ago',
-    },
-    {
-      id_user: 1,
-      title: 'Aid for necessary items to help our country',
-      donation: 320000,
-      message:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. In faucibus leo etiam cras elit malesuada augue',
-      time: '12 minutes ago',
-    },
-    {
-      id_user: 1,
-      title: 'Aid for necessary items to help our country',
-      donation: 320000,
-      message:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. In faucibus leo etiam cras elit malesuada augue',
-      time: '12 minutes ago',
-    },
-  ],
+
+  dataNewest: [],
+  dataUrgent: [],
+  dataGainedMomentum: [],
   dataCampaignDetail: [],
-  dataCampaignDetailComment: [],
-  searchCampaign: [],
+  dataDonator: [],
+  dataComment: [],
+  dataRelated: [],
+  dataRemainingTime: '',
+  dataMyCampaign: [],
+  dataMyDonation: [],
+  dataSearch: [],
+  dataFilter: [],
   renderType: '',
   filter: '',
+  error: null,
   isLoading: false,
 };
 
@@ -108,7 +59,15 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        dataCampaign: action.data,
+        dataNewest: action.dataNewest,
+        dataUrgent: action.dataUrgent,
+        dataGainedMomentum: action.dataGainedMomentum,
+      };
+    case 'GET_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
       };
     case 'GET_CAMPAIGN_DETAIL':
       return {
@@ -119,29 +78,51 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        dataCampaignDetail: action.data,
+        dataCampaignDetail: action.campaignDetail,
+        dataDonator: action.donator,
+        dataComment: action.comment,
+        dataRelated: action.related,
+        dataRemainingTime: action.remainingTime,
       };
-    case 'GET_CAMPAIGN_DETAIL_COMMENT':
+    case 'GET_CAMPAIGN_DETAIL_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'GET_RELATED_CAMPAIGN':
       return {
         ...state,
         isLoading: true,
       };
-    case 'GET_CAMPAIGN_DETAIL_COMMENT_SUCCESS':
+    case 'GET_RELATED_CAMPAIGN_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        dataCampaignDetailComment: action.data,
+        dataRelated: action.related,
       };
-    case 'SEARCH_CAMPAIGN':
+    case 'GET_RELATED_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'GET_MY_CAMPAIGN':
       return {
         ...state,
         isLoading: true,
       };
-    case 'SEARCH_CAMPAIGN_SUCCESS':
+    case 'GET_MY_CAMPAIGN_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        searchCampaign: action.data,
+        dataMyCampaign: action.data,
+      };
+    case 'GET_MY_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
       };
     case 'GET_MY_DONATION':
       return {
@@ -153,6 +134,47 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataMyDonation: action.data,
+      };
+    case 'GET_MY_DONATION_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'SEARCH_CAMPAIGN':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'SEARCH_CAMPAIGN_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dataSearch: action.data,
+        error: action.error,
+      };
+    case 'SEARCH_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'FILTER_CAMPAIGN':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'FILTER_CAMPAIGN_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dataFilter: action.data,
+      };
+    case 'FILTER_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
       };
     case 'RENDER_TYPE':
       return {

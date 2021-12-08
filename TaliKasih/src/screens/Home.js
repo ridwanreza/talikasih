@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -29,22 +30,42 @@ const dataCarousel = [
 const Home = props => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
+  const [token, setToken] = useState(props.token);
+
+  useEffect(() => {
+    props.getCampaign();
+    setToken(props.token);
+  }, [props.token]);
 
   const renderItem = ({item, index}) => {
     return <Image source={item.img} style={styles.slideImg} />;
   };
 
-  if (props.filter == 'Filter_Sort') {
+  if (props.loading === true) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text
+          style={{
+            color: '#000000',
+            fontSize: hp('2.6%'),
+            fontFamily: 'Nunito-Italic',
+          }}>
+          Loading... Please wait a while...
+        </Text>
+        <ActivityIndicator size="large" color="#1D94A8" />
+      </View>
+    );
+  } else if (props.filter == 'Filter_Sort') {
     return (
       <View style={styles.container}>
         <View style={styles.filterCategoryContainer}>
           <Text style={styles.filterCategoryText}>
-            {props.dataCampaign[0].category}
+            {props.dataFilter[0].category.category}
           </Text>
         </View>
         <Text style={styles.filterTitle}>Help them to get speedy recovery</Text>
         <FlatList
-          data={props.dataCampaign}
+          data={props.dataFilter}
           horizontal={false}
           numColumns={1}
           showsVerticalScrollIndicator={false}
@@ -103,7 +124,7 @@ const Home = props => {
         />
         <Text style={styles.titleCardText}>Newest</Text>
         <FlatList
-          data={props.dataCampaign}
+          data={props.dataNewest}
           horizontal={true}
           numColumns={1}
           showsHorizontalScrollIndicator={false}
@@ -118,7 +139,7 @@ const Home = props => {
         />
         <Text style={styles.titleCardText}>Most Urgent</Text>
         <FlatList
-          data={props.dataCampaign}
+          data={props.dataUrgent}
           horizontal={true}
           numColumns={1}
           showsHorizontalScrollIndicator={false}
@@ -133,7 +154,7 @@ const Home = props => {
         />
         <Text style={styles.titleCardText}>Gained Momentum</Text>
         <FlatList
-          data={props.dataCampaign}
+          data={props.dataGainedMomentum}
           horizontal={true}
           numColumns={1}
           showsHorizontalScrollIndicator={false}
@@ -153,22 +174,26 @@ const Home = props => {
 };
 
 const reduxState = state => ({
-  dataCampaign: state.taliKasih.dataCampaign,
+  dataNewest: state.taliKasih.dataNewest,
+  dataUrgent: state.taliKasih.dataUrgent,
+  dataGainedMomentum: state.taliKasih.dataGainedMomentum,
+  dataFilter: state.taliKasih.dataFilter,
+  loading: state.taliKasih.isLoading,
   filter: state.taliKasih.filter,
-  filterCat: state.taliKasih.filterCat,
+  token: state.auth.token,
 });
 
 const reduxDispatch = dispatch => ({
   getCampaign: () => dispatch({type: 'GET_CAMPAIGN'}),
 });
 
-export default connect(reduxState, null)(Home);
+export default connect(reduxState, reduxDispatch)(Home);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    paddingLeft: 15,
+    paddingLeft: wp('4%'),
     backgroundColor: '#FAF8F3',
   },
   titleCardText: {
@@ -180,7 +205,7 @@ const styles = StyleSheet.create({
   },
   carousel: {
     flexDirection: 'row',
-    paddingRight: 15,
+    paddingRight: wp('4%'),
   },
   slideImg: {
     width: wp('92%'),
@@ -209,7 +234,7 @@ const styles = StyleSheet.create({
     fontSize: hp('3.5%'),
     fontFamily: 'Nunito-Bold',
     color: '#000000',
-    lineHeight: 24,
     marginBottom: 15,
+    lineHeight: hp('4%'),
   },
 });

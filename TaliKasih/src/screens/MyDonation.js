@@ -27,17 +27,13 @@ const MyDonation = props => {
           maxToRenderPerBatch={10}
         />
       </View>
-      <FooterMyDonation />
+      <FooterMyDonation navigation={props.navigation} />
     </View>
   );
 };
 
 const reduxState = state => ({
   dataMyDonation: state.taliKasih.dataMyDonation,
-});
-
-const reduxDispatch = dispatch => ({
-  getMyDonation: () => dispatch({type: 'GET_MY_DONATION'}),
 });
 
 export default connect(reduxState, null)(MyDonation);

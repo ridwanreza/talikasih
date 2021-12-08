@@ -5,10 +5,11 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const FooterMyDonation = () => {
+const FooterMyDonation = props => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => props.navigation.navigate('Main', {screen: 'Donate'})}>
         <Text style={styles.buttonText}>DONATE</Text>
       </TouchableOpacity>
     </View>

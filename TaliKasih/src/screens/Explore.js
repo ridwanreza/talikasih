@@ -8,6 +8,7 @@ import {
   TextInput,
   FlatList,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -39,17 +40,39 @@ const dataCategory = [
 const Explore = props => {
   const [category, setCategory] = useState();
   const [isCategoryFocused, setIsCategoryFocused] = useState();
+  const [search, setSearch] = useState();
+
+  if (props.loading === true) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text
+          style={{
+            color: '#000000',
+            fontSize: hp('2.6%'),
+            fontFamily: 'Nunito-Italic',
+          }}>
+          Loading... Please wait a while...
+        </Text>
+        <ActivityIndicator size="large" color="#1D94A8" />
+      </View>
+    );
+  }
+
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.searchContainer}>
             <TextInput
-              style={styles.inputContainer}
+              style={styles.textInput}
               placeholder="Search"
               placeholderTextColor="#9F9F9F"
+              value={search}
+              onChangeText={value => setSearch(value)}
             />
-            <TouchableOpacity style={styles.searchIconContainer}>
+            <TouchableOpacity
+              style={styles.searchIconContainer}
+              onPress={() => props.searchCampaign(search)}>
               <Ionicons name="search" size={hp('3.5%')} color="#1D94A8" />
             </TouchableOpacity>
           </View>
@@ -73,21 +96,28 @@ const Explore = props => {
               </View>
             ))}
           </View>
-          <Text style={styles.titleCardText}>Recently viewed</Text>
-          <FlatList
-            data={props.dataCampaign}
-            horizontal={true}
-            numColumns={1}
-            showsHorizontalScrollIndicator={false}
-            renderItem={data => (
-              <View>
-                <CardCampaign data={data.item} navigation={props.navigation} />
-              </View>
-            )}
-            keyExtractor={(item, i) => i}
-            initialNumToRender={4}
-            maxToRenderPerBatch={10}
-          />
+          <Text style={styles.titleCardText}>Recently searched</Text>
+          {props.error === null ? (
+            <FlatList
+              data={props.dataSearch}
+              horizontal={true}
+              numColumns={1}
+              showsHorizontalScrollIndicator={false}
+              renderItem={data => (
+                <View>
+                  <CardCampaign
+                    data={data.item}
+                    navigation={props.navigation}
+                  />
+                </View>
+              )}
+              keyExtractor={(item, i) => i}
+              initialNumToRender={4}
+              maxToRenderPerBatch={10}
+            />
+          ) : (
+            <Text style={styles.errorMsg}>{props.error}</Text>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -95,14 +125,16 @@ const Explore = props => {
 };
 
 const reduxState = state => ({
-  dataCampaign: state.taliKasih.dataCampaign,
+  dataSearch: state.taliKasih.dataSearch,
+  loading: state.taliKasih.isLoading,
+  error: state.taliKasih.error,
 });
 
 const reduxDispatch = dispatch => ({
-  getCampaign: () => dispatch({type: 'GET_CAMPAIGN'}),
+  searchCampaign: b => dispatch({type: 'SEARCH_CAMPAIGN', value: b}),
 });
 
-export default connect(reduxState, null)(Explore);
+export default connect(reduxState, reduxDispatch)(Explore);
 
 const styles = StyleSheet.create({
   container: {
@@ -119,14 +151,16 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
   },
-  inputContainer: {
+  textInput: {
     width: wp('72%'),
     height: hp('6.5%'),
-    borderBottomWidth: 1,
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2.3%'),
+    color: '#000000',
     borderRadius: 10,
-    borderColor: '#E1E0E0',
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 15,
+    elevation: 3,
   },
   searchIconContainer: {
     width: wp('15%'),
@@ -195,5 +229,10 @@ const styles = StyleSheet.create({
     color: '#000000',
     textDecorationLine: 'underline',
     marginBottom: 10,
+  },
+  errorMsg: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2.4%'),
+    color: '#1D94A8',
   },
 });

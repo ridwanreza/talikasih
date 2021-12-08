@@ -13,7 +13,7 @@ const MyCampaign = props => {
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
       <View style={styles.container}>
         <FlatList
-          data={props.dataCampaign}
+          data={props.dataMyCampaign}
           horizontal={false}
           numColumns={1}
           showsVerticalScrollIndicator={false}
@@ -30,17 +30,13 @@ const MyCampaign = props => {
           maxToRenderPerBatch={10}
         />
       </View>
-      <FooterMyCampaign />
+      <FooterMyCampaign navigation={props.navigation} />
     </View>
   );
 };
 
 const reduxState = state => ({
-  dataCampaign: state.taliKasih.dataCampaign,
-});
-
-const reduxDispatch = dispatch => ({
-  getCampaign: () => dispatch({type: 'GET_CAMPAIGN'}),
+  dataMyCampaign: state.taliKasih.dataMyCampaign,
 });
 
 export default connect(reduxState, null)(MyCampaign);

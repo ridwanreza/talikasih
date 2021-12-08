@@ -16,17 +16,17 @@ const CardMyDonation = ({data, navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.timeContainer}>
-        <Text style={styles.timeText}>{data.time}</Text>
+        <Text style={styles.timeText}>{data.donateTime}</Text>
       </View>
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('Campaign Details', {
-            campaignId: data.id,
+            campaignId: data.campaign.id,
           })
         }>
-        <Text style={styles.campaignTitle}>{data.title}</Text>
+        <Text style={styles.campaignTitle}>{data.campaign.title}</Text>
       </TouchableOpacity>
-      <Text style={styles.donationValueText}>{`Rp. ${data.donation}`}</Text>
+      <Text style={styles.donationValueText}>{`Rp. ${data.amount}`}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.donationMessage}>{`"${data.message}"`}</Text>
       </ScrollView>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     color: '#000000',
     textDecorationLine: 'underline',
-    lineHeight: 16,
+    lineHeight: hp('2.6%'),
     marginBottom: 5,
   },
   donationValueText: {

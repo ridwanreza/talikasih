@@ -10,11 +10,13 @@ const CardCampaign = ({data, navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity>
-        <Image source={data.img} style={styles.campaignPoster} />
+        <Image source={{uri: data.image}} style={styles.campaignPoster} />
       </TouchableOpacity>
       <View style={styles.contentContainer}>
         <View style={styles.campaignCategory}>
-          <Text style={styles.campaignCategoryText}>{data.category}</Text>
+          <Text style={styles.campaignCategoryText}>
+            {data.category.category}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() =>
@@ -24,10 +26,13 @@ const CardCampaign = ({data, navigation}) => {
           }>
           <Text style={styles.campaignTitle}>{data.title}</Text>
         </TouchableOpacity>
-        <Text style={styles.campaignKeyword}>{data.keyword}</Text>
+        <Text
+          style={
+            styles.campaignKeyword
+          }>{`IDR ${data.deviation} more to reach goal`}</Text>
         <View style={styles.progressContainer}>
           <ProgressBar
-            progress={data.raised / data.goal}
+            progress={data.collected / data.goal}
             width={null}
             borderWidth={0}
             color={'#1D94A8'}
@@ -39,7 +44,7 @@ const CardCampaign = ({data, navigation}) => {
           <Text style={styles.raisedGoalText}>Goal</Text>
         </View>
         <View style={styles.arrange}>
-          <Text style={styles.raisedValueText}>{`IDR ${data.raised}`}</Text>
+          <Text style={styles.raisedValueText}>{`IDR ${data.collected}`}</Text>
           <Text style={styles.goalValueText}>{`IDR ${data.goal}`}</Text>
         </View>
       </View>
@@ -98,7 +103,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2.4%'),
     fontFamily: 'Nunito-Bold',
     color: '#000000',
-    lineHeight: 16,
+    lineHeight: hp('2.6%'),
   },
   campaignKeyword: {
     fontSize: hp('1.8%'),

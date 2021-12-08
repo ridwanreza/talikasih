@@ -6,9 +6,11 @@ import {
 } from 'react-native-responsive-screen';
 import LinearGradient from 'react-native-linear-gradient';
 import Logo from '../assets/images/logo_vertical.png';
+import {connect} from 'react-redux';
 
 const SplashScreen = props => {
   useEffect(() => {
+    props.getToken();
     setTimeout(() => {
       props.navigation.navigate('Main');
     }, 3000);
@@ -26,7 +28,11 @@ const SplashScreen = props => {
   );
 };
 
-export default SplashScreen;
+const reduxDispatch = dispatch => ({
+  getToken: () => dispatch({type: 'GET_TOKEN'}),
+});
+
+export default connect(null, reduxDispatch)(SplashScreen);
 
 const styles = StyleSheet.create({
   container: {

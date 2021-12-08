@@ -7,6 +7,8 @@ const getToken = async () => {
     const value = await AsyncStorage.getItem('TOKEN');
     if (value !== null) {
       return value;
+    } else {
+      return null;
     }
   } catch (e) {
     console.log(e);
@@ -15,83 +17,169 @@ const getToken = async () => {
 
 function* getCampaign() {
   try {
-    const responseCampaign = yield axios.get(
-      `https://api.themoviedb.org/3/movie/popular?api_key=2d4072f5f157d3f471fe122ba024224f&language=en-US&page=1`,
-    );
-
-    yield put({
-      type: 'GET_CAMPAIGN_SUCCESS',
-      data: responseCampaign.data.results,
+    const resCampaign = yield axios({
+      method: 'GET',
+      url: `https://api-talikasih.herokuapp.com/discover/all`,
     });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'GET_CAMPAIGN_SUCCESS',
+        dataNewest: resCampaign.data.dataNewest,
+        dataUrgent: resCampaign.data.dataUrgent,
+        dataGainedMomentum: resCampaign.data.gainedMomentum,
+        error: null,
+      });
+    }
   } catch (err) {
     console.log(err);
+    yield put({type: 'GET_CAMPAIGN_FAILED', error: err.response.data.errors});
   }
 }
 
 function* getCampaignDetail(action) {
   try {
-    const token = yield getToken();
-
-    const responseCampaign = yield axios({
+    const resCampaign = yield axios({
       method: 'GET',
-      url: `https://api-see-event-teamb.herokuapp.com/event/${action.value}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: action.data,
+      url: `https://api-talikasih.herokuapp.com/discover/details/${action.value}`,
     });
-
-    yield put({
-      type: 'GET_CAMPAIGN_DETAIL_SUCCESS',
-      data: responseCampaign.data.data,
-    });
-    //console.log(responseEvent.data.data);
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'GET_CAMPAIGN_DETAIL_SUCCESS',
+        campaignDetail: resCampaign.data.detailCampaign,
+        donator: resCampaign.data.donatur,
+        comment: resCampaign.data.komen,
+        related: resCampaign.data.related,
+        remainingTime: resCampaign.data.remainingTime,
+        error: null,
+      });
+    }
   } catch (err) {
     console.log(err);
+    yield put({
+      type: 'GET_CAMPAIGN_DETAIL_FAILED',
+      error: err.response.data.errors,
+    });
   }
 }
 
-function* getCampaignDetailComment(action) {
+function* getRelatedCampaign(action) {
+  try {
+    const resCampaign = yield axios({
+      method: 'GET',
+      url: `https://api-talikasih.herokuapp.com/discover/related/${action.value}`,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'GET_RELATED_CAMPAIGN_SUCCESS',
+        related: resCampaign.data.data,
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'GET_RELATED_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
+function* getMyCampaign() {
   try {
     const token = yield getToken();
 
-    const responseCampaign = yield axios({
+    const resCampaign = yield axios({
       method: 'GET',
-      url: `https://api-see-event-teamb.herokuapp.com/event/${action.value}`,
+      url: `https://api-talikasih.herokuapp.com/profile/myCampaign`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        access_token: token,
       },
-      data: action.data,
     });
-
-    yield put({
-      type: 'GET_EVENT_CAMPAIGN_COMMENT_SUCCESS',
-      data: responseCampaign.data.data.comments,
-    });
-    //console.log(responseEvent.data.data.comments);
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'GET_MY_CAMPAIGN_SUCCESS',
+        data: resCampaign.data.data,
+        error: null,
+      });
+    }
   } catch (err) {
     console.log(err);
+    yield put({
+      type: 'GET_MY_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
+function* getMyDonation() {
+  try {
+    const token = yield getToken();
+
+    const resCampaign = yield axios({
+      method: 'GET',
+      url: `https://api-talikasih.herokuapp.com/profile/myDonate`,
+      headers: {
+        access_token: token,
+      },
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'GET_MY_DONATION_SUCCESS',
+        data: resCampaign.data.data,
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'GET_MY_DONATION_FAILED',
+      error: err.response.data.errors,
+    });
   }
 }
 
 function* searchCampaign(action) {
   try {
-    const token = yield getToken();
-
-    const responseCampaign = yield axios({
+    const resCampaign = yield axios({
       method: 'GET',
-      url: `https://api-see-event-teamb.herokuapp.com/event?search=${action.value}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: action.data,
+      url: `https://api-talikasih.herokuapp.com/discover/search?search=${action.value}`,
     });
-    yield put({
-      type: 'SEARCH_CAMPAIGN_SUCCESS',
-      data: responseCampaign.data.data,
-    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'SEARCH_CAMPAIGN_SUCCESS',
+        data: resCampaign.data.campaigns,
+        error: null,
+      });
+    }
   } catch (err) {
     console.log(err);
+    yield put({
+      type: 'SEARCH_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
+function* filterCampaign(action) {
+  try {
+    const resCampaign = yield axios({
+      method: 'GET',
+      url: `https://api-talikasih.herokuapp.com/discover/category?kategori=${action.category}&sort=${action.sort}`,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'FILTER_CAMPAIGN_SUCCESS',
+        data: resCampaign.data.campaigns,
+        error: null,
+      });
+      action.navigation.navigate('Main');
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'FILTER_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
   }
 }
 
@@ -106,8 +194,11 @@ function* setFilter(action) {
 function* taliKasihSaga() {
   yield takeLatest('GET_CAMPAIGN', getCampaign);
   yield takeLatest('GET_CAMPAIGN_DETAIL', getCampaignDetail);
-  yield takeLatest('GET_CAMPAIGN_DETAIL_COMMENT', getCampaignDetailComment);
+  yield takeLatest('GET_RELATED_CAMPAIGN', getRelatedCampaign);
+  yield takeLatest('GET_MY_CAMPAIGN', getMyCampaign);
+  yield takeLatest('GET_MY_DONATION', getMyDonation);
   yield takeLatest('SEARCH_CAMPAIGN', searchCampaign);
+  yield takeLatest('FILTER_CAMPAIGN', filterCampaign);
   yield takeLatest('RENDER_TYPE', setRenderType);
   yield takeLatest('FILTER', setFilter);
 }

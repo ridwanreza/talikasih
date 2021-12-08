@@ -61,13 +61,13 @@ const FilterSort = props => {
               <View key={index}>
                 <TouchableOpacity
                   style={
-                    isCategoryFocused == item.name
+                    isCategoryFocused == item.id_category
                       ? styles.categoryCardFocused
                       : styles.categoryCard
                   }
                   onPress={() => {
-                    setCategory(item.name);
-                    setIsCategoryFocused(item.name);
+                    setCategory(item.id_category);
+                    setIsCategoryFocused(item.id_category);
                   }}>
                   <Image source={item.img} style={styles.categoryCardImg} />
                   <Text style={styles.categoryCardText}>{item.name}</Text>

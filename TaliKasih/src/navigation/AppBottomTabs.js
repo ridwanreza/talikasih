@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {
@@ -12,10 +12,17 @@ import CreateCampaign from '../screens/CreateCampaign';
 import Profile from '../screens/Profile';
 import More from '../screens/More';
 import LogoHeader from '../assets/images/logo_header.png';
+import {connect} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
-const AppBottomTabs = () => {
+const AppBottomTabs = props => {
+  const [token, setToken] = useState(props.token);
+
+  useEffect(() => {
+    setToken(props.token);
+  }, [props.token]);
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -26,22 +33,22 @@ const AppBottomTabs = () => {
         tabBarInactiveTintColor: '#999999',
         tabBarActiveTintColor: '#1D94A8',
         tabBarInactiveBackgroundColor: '#FFFFFF',
-        tabBarActiveBackgroundColor: '#ECEEEF',
-        tabBarLabelStyle: {fontSize: hp('1.6%'), fontFamily: 'Nunito-Regular'},
+        tabBarActiveBackgroundColor: '#FAF8F3',
+        tabBarLabelStyle: {fontSize: hp('1.6%'), fontFamily: 'Nunito-Bold'},
         tabBarIcon: ({focused, size, color}) => {
           let iconName;
           if (route.name == 'Donate') {
             iconName = focused ? 'star' : 'star-outline';
-            size = focused ? hp('4.5%') : hp('4%');
+            size = focused ? hp('4%') : hp('3.8%');
           } else if (route.name == 'Create Campaign') {
             iconName = focused ? 'plus-box' : 'plus-box-outline';
-            size = focused ? hp('4.5%') : hp('4%');
+            size = focused ? hp('4%') : hp('3.8%');
           } else if (route.name == 'My Account') {
             iconName = focused ? 'account' : 'account-outline';
-            size = focused ? hp('4.5%') : hp('4%');
+            size = focused ? hp('4%') : hp('3.8%');
           } else if (route.name == 'More') {
             iconName = focused ? 'dots-horizontal' : 'dots-horizontal';
-            size = focused ? hp('4.5%') : hp('4%');
+            size = focused ? hp('4%') : hp('3.8%');
           }
           return <MCIcons name={iconName} size={size} color={color} />;
         },
@@ -57,10 +64,12 @@ const AppBottomTabs = () => {
                     onPress={() => props.navigation.navigate('Explore')}>
                     <Ionicons name="search" size={hp('3.5%')} color="#1D94A8" />
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate('Login')}>
-                    <Text style={styles.loginText}>Login</Text>
-                  </TouchableOpacity>
+                  {token !== null ? null : (
+                    <TouchableOpacity
+                      onPress={() => props.navigation.navigate('Login')}>
+                      <Text style={styles.loginText}>Login</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             );
@@ -114,10 +123,12 @@ const AppBottomTabs = () => {
                     onPress={() => props.navigation.navigate('Explore')}>
                     <Ionicons name="search" size={hp('3.5%')} color="#1D94A8" />
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate('Login')}>
-                    <Text style={styles.loginText}>Login</Text>
-                  </TouchableOpacity>
+                  {token !== null ? null : (
+                    <TouchableOpacity
+                      onPress={() => props.navigation.navigate('Login')}>
+                      <Text style={styles.loginText}>Login</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             );
@@ -130,7 +141,15 @@ const AppBottomTabs = () => {
   );
 };
 
-export default AppBottomTabs;
+const reduxState = state => ({
+  token: state.auth.token,
+});
+
+const reduxDispatch = dispatch => ({
+  getToken: () => dispatch({type: 'GET_TOKEN'}),
+});
+
+export default connect(reduxState, null)(AppBottomTabs);
 
 const styles = StyleSheet.create({
   headerContainer: {

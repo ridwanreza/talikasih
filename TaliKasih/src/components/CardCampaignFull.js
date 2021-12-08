@@ -10,11 +10,13 @@ const CardCampaignFull = ({data, navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity>
-        <Image source={data.img} style={styles.campaignPoster} />
+        <Image source={{uri: data.image}} style={styles.campaignPoster} />
       </TouchableOpacity>
       <View style={styles.contentContainer}>
         <View style={styles.campaignCategory}>
-          <Text style={styles.campaignCategoryText}>{data.category}</Text>
+          <Text style={styles.campaignCategoryText}>
+            {data.category.category}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() =>
@@ -24,10 +26,13 @@ const CardCampaignFull = ({data, navigation}) => {
           }>
           <Text style={styles.campaignTitle}>{data.title}</Text>
         </TouchableOpacity>
-        <Text style={styles.campaignKeyword}>{data.keyword}</Text>
+        <Text
+          style={
+            styles.campaignKeyword
+          }>{`IDR ${data.deviation} more to reach goal`}</Text>
         <View style={styles.progressContainer}>
           <ProgressBar
-            progress={data.raised / data.goal}
+            progress={data.collected / data.goal}
             width={null}
             borderWidth={0}
             color={'#1D94A8'}
@@ -39,7 +44,7 @@ const CardCampaignFull = ({data, navigation}) => {
           <Text style={styles.raisedGoalText}>Goal</Text>
         </View>
         <View style={styles.arrange}>
-          <Text style={styles.raisedValueText}>{`IDR ${data.raised}`}</Text>
+          <Text style={styles.raisedValueText}>{`IDR ${data.collected}`}</Text>
           <Text style={styles.goalValueText}>{`IDR ${data.goal}`}</Text>
         </View>
       </View>
@@ -51,7 +56,7 @@ export default CardCampaignFull;
 
 const styles = StyleSheet.create({
   container: {
-    width: wp('90%'),
+    width: wp('92%'),
     height: hp('50%'),
     borderRadius: 8,
     elevation: 3,
@@ -60,7 +65,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   campaignPoster: {
-    width: wp('90%'),
+    width: wp('92%'),
     height: hp('25%'),
     resizeMode: 'stretch',
     borderTopRightRadius: 8,
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   contentContainer: {
-    width: wp('90%'),
+    width: wp('92%'),
     height: hp('25%'),
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2.4%'),
     fontFamily: 'Nunito-Bold',
     color: '#000000',
-    lineHeight: 16,
+    lineHeight: hp('2.6%'),
   },
   campaignKeyword: {
     fontSize: hp('1.8%'),

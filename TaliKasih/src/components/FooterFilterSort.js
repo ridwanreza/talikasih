@@ -18,7 +18,11 @@ const FooterFilterSort = props => {
             Alert.alert('TaliKasih', 'Please select category and sort by');
           } else {
             props.setFilter('Filter_Sort');
-            props.navigation.navigate('Main');
+            props.filterCampaign(
+              props.data.category,
+              props.data.sort,
+              props.navigation,
+            );
           }
         }}>
         <Text style={styles.buttonText}>FILTER</Text>
@@ -28,6 +32,8 @@ const FooterFilterSort = props => {
 };
 
 const reduxDispatch = dispatch => ({
+  filterCampaign: (a, b, c) =>
+    dispatch({type: 'FILTER_CAMPAIGN', category: a, sort: b, navigation: c}),
   setFilter: a => dispatch({type: 'FILTER', data: a}),
 });
 
