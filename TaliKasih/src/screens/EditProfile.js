@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ImageBackgroundBase,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -71,9 +72,6 @@ const EditProfile = props => {
     bankName: bankName,
     bankAccount: bankAccNumber,
   };
-
-  console.log(rawImage);
-  console.log(props.error);
 
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>

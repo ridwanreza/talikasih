@@ -189,7 +189,6 @@ function* setFilter(action) {
 
 function* createCampaign(action) {
   try {
-    console.log(action.data);
     const token = yield getToken();
 
     const resCampaign = yield axios({

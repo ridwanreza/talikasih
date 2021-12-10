@@ -37,6 +37,10 @@ const Home = props => {
     setToken(props.token);
   }, [props.token]);
 
+  useEffect(() => {
+    props.getCampaign();
+  }, [props.dataCampaign]);
+
   const renderItem = ({item, index}) => {
     return <Image source={item.img} style={styles.slideImg} />;
   };
@@ -178,6 +182,7 @@ const reduxState = state => ({
   dataUrgent: state.taliKasih.dataUrgent,
   dataGainedMomentum: state.taliKasih.dataGainedMomentum,
   dataFilter: state.taliKasih.dataFilter,
+  dataCampaign: state.taliKasih.dataCampaign,
   loading: state.taliKasih.isLoading,
   filter: state.taliKasih.filter,
   token: state.auth.token,

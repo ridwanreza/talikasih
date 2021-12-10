@@ -143,7 +143,7 @@ function* updateUser(action) {
     const token = yield getToken();
 
     const resUser = yield axios({
-      method: 'PUT',
+      method: 'PATCH',
       url: `https://api-talikasih.herokuapp.com/profile/update`,
       headers: {
         access_token: token,
@@ -157,7 +157,7 @@ function* updateUser(action) {
         error: null,
       });
       action.navigation.navigate('Main', {screen: 'My Account'});
-      console.log(resUser.data.data);
+      //console.log(resUser.data.data);
     }
   } catch (err) {
     console.log(err);

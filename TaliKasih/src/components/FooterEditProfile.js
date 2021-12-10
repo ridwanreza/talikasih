@@ -20,7 +20,13 @@ const FooterButton = props => {
         ) {
           Alert.alert('TaliKasih', 'Please fill the required data above!');
         } else if (props.data) {
-          props.updateUser(props.data, props.navigation);
+          const dataProfile = new FormData();
+          dataProfile.append('name', props.data.name);
+          dataProfile.append('email', props.data.email);
+          dataProfile.append('image', props.data.image);
+          dataProfile.append('bankName', props.data.bankName);
+          dataProfile.append('bankAccount', props.data.bankAccount);
+          props.updateUser(dataProfile, props.navigation);
         }
       }}>
       <Text style={styles.buttonText}>{props.name}</Text>

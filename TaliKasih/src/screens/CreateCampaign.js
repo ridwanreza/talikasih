@@ -75,7 +75,7 @@ const CreateCampaign = props => {
         };
         console.log(source);
         setImg(source.uri);
-        setRawImage(source.uri);
+        setRawImage(source);
       } else {
         console.log(response);
       }
@@ -91,14 +91,16 @@ const CreateCampaign = props => {
     categoryId: categoryId,
   };
 
-  // useEffect(() => {
-  //   if (props.token === null) {
-  //     props.navigation.navigate('Login');
-  //   }
-  // }, [props.token]);
-
-  console.log(props.error);
-  console.log(rawImage);
+  useEffect(() => {
+    setImg();
+    setRawImage();
+    setTitle();
+    setGoal();
+    setPickDate();
+    setStory();
+    setCategory();
+    setCategoryId();
+  }, [props.dataCampaign]);
 
   if (props.token === null) {
     return <Auth navigation={props.navigation} />;
@@ -218,6 +220,7 @@ const CreateCampaign = props => {
 
 const reduxState = state => ({
   token: state.auth.token,
+  dataCampaign: state.taliKasih.dataCampaign,
   loading: state.taliKasih.isLoading,
   error: state.taliKasih.error,
 });

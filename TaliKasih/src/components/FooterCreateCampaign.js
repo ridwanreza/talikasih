@@ -21,7 +21,14 @@ const FooterButton = props => {
         ) {
           Alert.alert('TaliKasih', 'Please fill the required data above!');
         } else if (props.data) {
-          props.createCampaign(props.data, props.navigation);
+          const dataCampaign = new FormData();
+          dataCampaign.append('image', props.data.image);
+          dataCampaign.append('title', props.data.title);
+          dataCampaign.append('goal', props.data.goal);
+          dataCampaign.append('dueDate', props.data.dueDate);
+          dataCampaign.append('story', props.data.story);
+          dataCampaign.append('categoryId', props.data.categoryId);
+          props.createCampaign(dataCampaign, props.navigation);
         }
       }}>
       <Text style={styles.buttonText}>{props.name}</Text>

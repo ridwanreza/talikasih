@@ -24,12 +24,13 @@ const CardCampaign = ({data, navigation}) => {
               campaignId: data.id,
             })
           }>
-          <Text style={styles.campaignTitle}>{data.title}</Text>
+          <Text style={styles.campaignTitle}>
+            {data.title.length > 40
+              ? `${data.title.substr(0, 40)}...`
+              : data.title}
+          </Text>
         </TouchableOpacity>
-        <Text
-          style={
-            styles.campaignKeyword
-          }>{`IDR ${data.deviation} more to reach goal`}</Text>
+        <Text style={styles.campaignKeyword}>{`by ${data.user.name}`}</Text>
         <View style={styles.progressContainer}>
           <ProgressBar
             progress={data.collected / data.goal}

@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -68,7 +69,16 @@ const Login = props => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.login(dataLogin, props.navigation)}>
+            onPress={() => {
+              if (!email || !password) {
+                Alert.alert(
+                  'TaliKasih',
+                  'Please fill the required data above!',
+                );
+              } else if (email && password) {
+                props.login(dataLogin, props.navigation);
+              }
+            }}>
             <Text style={styles.buttonText}>
               {props.isLoading == true ? `Loading...` : `LOGIN`}
             </Text>

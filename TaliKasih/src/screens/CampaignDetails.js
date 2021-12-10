@@ -30,7 +30,6 @@ const CampaignDetails = props => {
   useEffect(() => {
     props.getCampaignDetail(props.route.params.campaignId);
     setId(props.route.params.campaignId);
-    //props.getRelatedCampaign(props.route.params.campaignId);
   }, [props.dataMyComment]);
 
   const dataComment = {
@@ -115,6 +114,7 @@ const CampaignDetails = props => {
             onPress={() => {
               if (props.token !== null) {
                 props.createComment(dataComment, id);
+                setComment('');
               } else if (props.token === null) {
                 Alert.alert('TaliKasih', 'Please login or sign up first!');
               }
