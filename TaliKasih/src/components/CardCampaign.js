@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   campaignCategory: {
-    width: wp('22%'),
+    width: wp('25%'),
     borderRadius: 4,
     borderWidth: 1.5,
     borderColor: '#A43F3C',

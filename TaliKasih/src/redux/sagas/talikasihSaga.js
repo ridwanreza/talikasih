@@ -46,6 +46,7 @@ function* getCampaignDetail(action) {
       yield put({
         type: 'GET_CAMPAIGN_DETAIL_SUCCESS',
         campaignDetail: resCampaign.data.detailCampaign,
+        updateProgress: resCampaign.data.updateCampaign,
         donator: resCampaign.data.donatur,
         comment: resCampaign.data.komen,
         related: resCampaign.data.related,
@@ -215,6 +216,7 @@ function* createCampaign(action) {
     });
   }
 }
+
 function* createComment(action) {
   try {
     const token = yield getToken();
@@ -243,6 +245,34 @@ function* createComment(action) {
   }
 }
 
+function* updateCampaignProgress(action) {
+  try {
+    const token = yield getToken();
+
+    const resCampaign = yield axios({
+      method: 'POST',
+      url: `https://api-talikasih.herokuapp.com/update/${action.value}`,
+      headers: {
+        access_token: token,
+      },
+      data: action.data,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'UPDATE_CAMPAIGN_PROGRESS_SUCCESS',
+        error: null,
+      });
+      action.navigation.navigate('Main', {screen: 'Donate'});
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'UPDATE_CAMPAIGN_PROGRESS_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
 function* taliKasihSaga() {
   yield takeLatest('GET_CAMPAIGN', getCampaign);
   yield takeLatest('GET_CAMPAIGN_DETAIL', getCampaignDetail);
@@ -254,6 +284,7 @@ function* taliKasihSaga() {
   yield takeLatest('FILTER', setFilter);
   yield takeLatest('CREATE_CAMPAIGN', createCampaign);
   yield takeLatest('CREATE_COMMENT', createComment);
+  yield takeLatest('UPDATE_CAMPAIGN_PROGRESS', updateCampaignProgress);
 }
 
 export default taliKasihSaga;

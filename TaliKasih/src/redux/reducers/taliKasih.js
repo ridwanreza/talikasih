@@ -34,6 +34,7 @@ const initialState = {
   dataUrgent: [],
   dataGainedMomentum: [],
   dataCampaignDetail: [],
+  dataUpdateProgress: [],
   dataDonator: [],
   dataComment: [],
   dataRelated: [],
@@ -42,7 +43,7 @@ const initialState = {
   dataMyDonation: [],
   dataSearch: [],
   dataFilter: [],
-  filter: '',
+  filter: false,
   dataCampaign: [],
   dataMyComment: [],
   error: null,
@@ -81,6 +82,7 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataCampaignDetail: action.campaignDetail,
+        dataUpdateProgress: action.updateProgress,
         dataDonator: action.donator,
         dataComment: action.comment,
         dataRelated: action.related,
@@ -225,6 +227,23 @@ const taliKasih = (state = initialState, action) => {
         error: action.error,
       };
     case 'CREATE_COMMENT_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'UPDATE_CAMPAIGN_PROGRESS':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'UPDATE_CAMPAIGN_PROGRESS_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'UPDATE_CAMPAIGN_PROGRESS_FAILED':
       return {
         ...state,
         isLoading: false,

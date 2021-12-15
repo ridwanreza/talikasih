@@ -11,10 +11,8 @@ import {connect} from 'react-redux';
 const SplashScreen = props => {
   useEffect(() => {
     props.getToken();
-    setTimeout(() => {
-      props.navigation.navigate('Main');
-    }, 3000);
   }, []);
+
   return (
     <LinearGradient
       colors={['#F1EDE4', '#E3ECEA', '#D7EBEE']}

@@ -12,12 +12,12 @@ const FooterFilterSort = props => {
       <TouchableOpacity
         onPress={() => {
           if (!props.data.category && !props.data.sort) {
-            props.setFilter('No_Filter');
+            props.setFilter(false);
             props.navigation.navigate('Main');
           } else if (!props.data.category || !props.data.sort) {
             Alert.alert('TaliKasih', 'Please select category and sort by');
           } else {
-            props.setFilter('Filter_Sort');
+            props.setFilter(true);
             props.filterCampaign(
               props.data.category,
               props.data.sort,
@@ -25,11 +25,17 @@ const FooterFilterSort = props => {
             );
           }
         }}>
-        <Text style={styles.buttonText}>FILTER</Text>
+        <Text style={styles.buttonText}>
+          {props.loading ? 'FILTERING...' : 'FILTER'}
+        </Text>
       </TouchableOpacity>
     </View>
   );
 };
+
+const reduxState = state => ({
+  loading: state.taliKasih.isLoading,
+});
 
 const reduxDispatch = dispatch => ({
   filterCampaign: (a, b, c) =>
@@ -37,7 +43,7 @@ const reduxDispatch = dispatch => ({
   setFilter: a => dispatch({type: 'FILTER', data: a}),
 });
 
-export default connect(null, reduxDispatch)(FooterFilterSort);
+export default connect(reduxState, reduxDispatch)(FooterFilterSort);
 
 const styles = StyleSheet.create({
   container: {

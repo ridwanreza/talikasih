@@ -145,14 +145,14 @@ const CampaignDetails = props => {
           />
         </View>
       </ScrollView>
-      <Footer navigation={props.navigation} token={props.token} />
+      <Footer navigation={props.navigation} token={props.token} id={id} />
     </View>
   );
 };
 
 const reduxState = state => ({
   detail: state.taliKasih.dataCampaignDetail,
-  detailUpdates: state.taliKasih.dataCampaignDetailUpdates,
+  detailUpdates: state.taliKasih.dataUpdateProgress,
   detailDonations: state.taliKasih.dataDonator,
   detailComments: state.taliKasih.dataComment,
   dataRelated: state.taliKasih.dataRelated,

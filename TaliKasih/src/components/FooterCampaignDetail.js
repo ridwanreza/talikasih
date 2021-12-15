@@ -5,6 +5,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Feather from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
 
 const FooterCampaignDetail = props => {
   return (
@@ -19,16 +20,31 @@ const FooterCampaignDetail = props => {
           if (props.token === null) {
             Alert.alert('TaliKasih', 'Please login or sign up first!');
           } else if (props.token !== null) {
-            props.navigation.navigate('Campaign Donate');
+            {
+              props.userId === props.fundRaiseId
+                ? props.navigation.navigate('Fundraise Update', {
+                    campaignId: props.id,
+                  })
+                : props.navigation.navigate('Campaign Donate', {
+                    campaignId: props.id,
+                  });
+            }
           }
         }}>
-        <Text style={styles.buttonText}>DONATE</Text>
+        <Text style={styles.buttonText}>
+          {props.userId === props.fundRaiseId ? 'UPDATE PROGRESS' : 'DONATE'}
+        </Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default FooterCampaignDetail;
+const reduxState = state => ({
+  userId: state.auth.dataUser.id,
+  fundRaiseId: state.taliKasih.dataCampaignDetail.userId,
+});
+
+export default connect(reduxState, null)(FooterCampaignDetail);
 
 const styles = StyleSheet.create({
   container: {

@@ -20,14 +20,15 @@ const FundraiseUpdate = props => {
   const [story, setStory] = useState();
   const [amount, setAmount] = useState();
   const [wdPurpose, setWdPurpose] = useState();
+  const [campaignId, setCampaignId] = useState(props.route.params.campaignId);
 
   const dataRecipient = {
-    story,
+    update: story,
   };
 
   const dataWithdrawal = {
-    amount,
-    wdPurpose,
+    update: wdPurpose,
+    amount: amount,
   };
 
   return (
@@ -117,9 +118,9 @@ const FundraiseUpdate = props => {
         </View>
       </ScrollView>
       <Footer
-        name={'UPDATE'}
         data={isRSelected ? dataRecipient : dataWithdrawal}
         selected={isRSelected}
+        campaignId={campaignId}
         navigation={props.navigation}
       />
     </View>

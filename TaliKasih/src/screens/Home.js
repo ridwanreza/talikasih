@@ -30,11 +30,12 @@ const dataCarousel = [
 const Home = props => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
-  const [token, setToken] = useState(props.token);
 
   useEffect(() => {
     props.getCampaign();
-    setToken(props.token);
+    if (props.token !== null) {
+      props.getUser();
+    }
   }, [props.token]);
 
   useEffect(() => {
@@ -59,15 +60,17 @@ const Home = props => {
         <ActivityIndicator size="large" color="#1D94A8" />
       </View>
     );
-  } else if (props.filter == 'Filter_Sort') {
+  } else if (props.filter === true) {
     return (
-      <View style={styles.container}>
+      <View style={styles.filterContainer}>
         <View style={styles.filterCategoryContainer}>
           <Text style={styles.filterCategoryText}>
             {props.dataFilter[0].category.category}
           </Text>
         </View>
-        <Text style={styles.filterTitle}>Help them to get speedy recovery</Text>
+        <Text style={styles.filterTitle}>
+          {props.dataFilter[0].category.quotes}
+        </Text>
         <FlatList
           data={props.dataFilter}
           horizontal={false}
@@ -190,6 +193,7 @@ const reduxState = state => ({
 
 const reduxDispatch = dispatch => ({
   getCampaign: () => dispatch({type: 'GET_CAMPAIGN'}),
+  getUser: () => dispatch({type: 'GET_USER'}),
 });
 
 export default connect(reduxState, reduxDispatch)(Home);
@@ -199,6 +203,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     paddingLeft: wp('4%'),
+    backgroundColor: '#FAF8F3',
+  },
+  filterContainer: {
+    flex: 1,
+    paddingTop: 15,
+    paddingHorizontal: wp('4%'),
     backgroundColor: '#FAF8F3',
   },
   titleCardText: {
@@ -219,7 +229,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   filterCategoryContainer: {
-    width: wp('28%'),
+    width: wp('30%'),
     borderRadius: 4,
     borderWidth: 1.5,
     borderColor: '#A43F3C',
@@ -236,7 +246,7 @@ const styles = StyleSheet.create({
     color: '#A43F3C',
   },
   filterTitle: {
-    fontSize: hp('3.5%'),
+    fontSize: hp('3%'),
     fontFamily: 'Nunito-Bold',
     color: '#000000',
     marginBottom: 15,

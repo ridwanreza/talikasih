@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  ImageBackgroundBase,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,

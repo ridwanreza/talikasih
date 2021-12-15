@@ -4,6 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {connect} from 'react-redux';
 
 const FooterButton = props => {
   return (
@@ -11,28 +12,52 @@ const FooterButton = props => {
       style={styles.container}
       onPress={() => {
         if (props.selected == true) {
-          if (!props.data.story) {
+          if (!props.data.update) {
             Alert.alert('TaliKasih', 'Please fill the story!');
-          } else if (props.data.story) {
-            props.navigation.navigate('Main', {screen: 'Donate'});
+          } else if (props.data.update) {
+            props.updateCampaignProgress(
+              props.data,
+              props.navigation,
+              props.campaignId,
+            );
           }
         } else if (props.selected == false) {
-          if (!props.data.amount || !props.data.wdPurpose) {
+          if (!props.data.amount || !props.data.update) {
             Alert.alert(
               'TaliKasih',
               'Please fill the amount and withdrawal purpose!',
             );
           } else if (props.data.amount && props.data.wdPurpose) {
-            props.navigation.navigate('Main', {screen: 'Donate'});
+            props.updateCampaignProgress(
+              props.data,
+              props.navigation,
+              props.campaignId,
+            );
           }
         }
       }}>
-      <Text style={styles.buttonText}>{props.name}</Text>
+      <Text style={styles.buttonText}>
+        {props.loading ? 'UPDATING...' : 'UPDATE'}
+      </Text>
     </TouchableOpacity>
   );
 };
 
-export default FooterButton;
+const reduxState = state => ({
+  loading: state.taliKasih.isLoading,
+});
+
+const reduxDispatch = dispatch => ({
+  updateCampaignProgress: (a, b, c) =>
+    dispatch({
+      type: 'UPDATE_CAMPAIGN_PROGRESS',
+      data: a,
+      navigation: b,
+      value: c,
+    }),
+});
+
+export default connect(reduxState, reduxDispatch)(FooterButton);
 
 const styles = StyleSheet.create({
   container: {

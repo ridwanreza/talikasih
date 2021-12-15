@@ -5,6 +5,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Entypo from 'react-native-vector-icons/Entypo';
+import moment from 'moment';
 import Timeline from 'react-native-timeline-flatlist';
 
 const dataUpdates = [
@@ -30,7 +31,7 @@ const dataUpdates = [
 
 const CardUpdates = props => {
   const [isWithdrawal, setIsWithdrawal] = useState(
-    props.data.updateCat == 'Withdrawal' ? true : false,
+    props.data.amount !== null ? true : false,
   );
 
   return (
@@ -50,7 +51,9 @@ const CardUpdates = props => {
       /> */}
       <View style={styles.timelineArrange}>
         <Entypo name="dot-single" style={styles.dot} />
-        <Text style={styles.date}>{props.data.date}</Text>
+        <Text style={styles.date}>
+          {moment(props.data.createdAt).format('DD MMMM YYYY')}
+        </Text>
         {isWithdrawal ? (
           <Text style={styles.withdrawalText}>Withdrawal</Text>
         ) : (
@@ -62,11 +65,11 @@ const CardUpdates = props => {
           <View style={styles.contentContainerWd}>
             <Text style={styles.wdAmount}>{`Rp. ${props.data.amount}`}</Text>
             <Text style={styles.wdPurposeText}>Withdrawal Purpose</Text>
-            <Text style={styles.wdStory}>{props.data.story}</Text>
+            <Text style={styles.wdStory}>{props.data.update}</Text>
           </View>
         ) : (
           <View style={styles.contentContainer}>
-            <Text style={styles.story}>{props.data.story}</Text>
+            <Text style={styles.story}>{props.data.update}</Text>
           </View>
         )}
       </View>

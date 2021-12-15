@@ -1,6 +1,6 @@
 const initialState = {
   isLoading: false,
-  dataUser: [],
+  dataUser: {},
   error: null,
   token: null,
 };
