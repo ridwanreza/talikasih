@@ -92,14 +92,55 @@ const CreateCampaign = props => {
   };
 
   useEffect(() => {
-    setImg();
-    setRawImage();
-    setTitle();
-    setGoal();
-    setPickDate();
-    setStory();
-    setCategory();
-    setCategoryId();
+    if (props.campaignId !== null) {
+      setImg(props.detail.image);
+      setRawImage(props.detail.image);
+      setTitle(props.detail.title);
+      setGoal(props.detail.goal);
+      setPickDate(moment(props.detail.dueDate).format('YYYY/MM/DD'));
+      setStory(props.detail.story);
+      switch (props.detail.categoryId) {
+        case 1:
+          setCategory('Disability');
+          break;
+        case 2:
+          setCategory('Medical');
+          break;
+        case 3:
+          setCategory('Education');
+          break;
+        case 4:
+          setCategory('Religious');
+          break;
+        case 5:
+          setCategory('Humanity');
+          break;
+        case 6:
+          setCategory('Environment');
+          break;
+        case 7:
+          setCategory('Disaster');
+          break;
+        case 8:
+          setCategory('Sociopreneur');
+          break;
+        default:
+          break;
+      }
+    }
+  }, [props.campaignId]);
+
+  useEffect(() => {
+    if (props.dataCampaign !== null) {
+      setImg();
+      setRawImage();
+      setTitle();
+      setGoal();
+      setPickDate();
+      setStory();
+      setCategory();
+      setCategoryId();
+    }
   }, [props.dataCampaign]);
 
   if (props.token === null) {
@@ -172,7 +213,7 @@ const CreateCampaign = props => {
             placeholder="e.g 20,000,000"
             placeholderTextColor="#9F9F9F"
             keyboardType="numeric"
-            value={goal}
+            value={goal !== undefined ? `${goal}` : null}
             onChangeText={value => setGoal(value)}
           />
           <View style={styles.arrange}>
@@ -208,9 +249,16 @@ const CreateCampaign = props => {
             onChangeText={value => setStory(value)}
           />
           <Footer
-            name={props.loading === true ? 'Loading...' : 'CREATE CAMPAIGN'}
+            name={
+              props.loading === true
+                ? 'Loading...'
+                : props.campaignId !== null
+                ? 'SAVE CHANGES'
+                : 'CREATE CAMPAIGN'
+            }
             data={dataCampaign}
             navigation={props.navigation}
+            campaignId={props.campaignId}
           />
         </View>
       </ScrollView>
@@ -223,6 +271,8 @@ const reduxState = state => ({
   dataCampaign: state.taliKasih.dataCampaign,
   loading: state.taliKasih.isLoading,
   error: state.taliKasih.error,
+  campaignId: state.taliKasih.campaignId,
+  detail: state.taliKasih.dataCampaignDetail,
 });
 
 export default connect(reduxState, null)(CreateCampaign);

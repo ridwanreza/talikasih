@@ -40,7 +40,7 @@ const Home = props => {
 
   useEffect(() => {
     props.getCampaign();
-  }, [props.dataCampaign]);
+  }, [props.dataCampaign, props.dataDonate]);
 
   const renderItem = ({item, index}) => {
     return <Image source={item.img} style={styles.slideImg} />;
@@ -186,6 +186,7 @@ const reduxState = state => ({
   dataGainedMomentum: state.taliKasih.dataGainedMomentum,
   dataFilter: state.taliKasih.dataFilter,
   dataCampaign: state.taliKasih.dataCampaign,
+  dataDonate: state.taliKasih.dataDonate,
   loading: state.taliKasih.isLoading,
   filter: state.taliKasih.filter,
   token: state.auth.token,
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   filterCategoryContainer: {
-    width: wp('30%'),
+    width: wp('32%'),
     borderRadius: 4,
     borderWidth: 1.5,
     borderColor: '#A43F3C',

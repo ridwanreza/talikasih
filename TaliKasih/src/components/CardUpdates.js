@@ -8,26 +8,26 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 import Timeline from 'react-native-timeline-flatlist';
 
-const dataUpdates = [
-  {
-    title: `TODAY`,
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. Sagittis quisque non, nullam facilisis. ',
-  },
-  {
-    title: `YESTERDAY`,
-    description: `20000000 \nWithdrawal Purpose \nLorem ipsum dolor sit amet, consectetur adipiscing elit. `,
-  },
-  {
-    title: `3 Oktober 2020`,
-    description: `20000000 \nWithdrawal Purpose \nLorem ipsum dolor sit amet, consectetur adipiscing elit. `,
-  },
-  {
-    title: `30 September 2020`,
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. ',
-  },
-];
+// const dataUpdates = [
+//   {
+//     title: `TODAY`,
+//     description:
+//       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. Sagittis quisque non, nullam facilisis. ',
+//   },
+//   {
+//     title: `YESTERDAY`,
+//     description: `20000000 \nWithdrawal Purpose \nLorem ipsum dolor sit amet, consectetur adipiscing elit. `,
+//   },
+//   {
+//     title: `3 Oktober 2020`,
+//     description: `20000000 \nWithdrawal Purpose \nLorem ipsum dolor sit amet, consectetur adipiscing elit. `,
+//   },
+//   {
+//     title: `30 September 2020`,
+//     description:
+//       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. ',
+//   },
+// ];
 
 const CardUpdates = props => {
   const [isWithdrawal, setIsWithdrawal] = useState(
@@ -52,7 +52,12 @@ const CardUpdates = props => {
       <View style={styles.timelineArrange}>
         <Entypo name="dot-single" style={styles.dot} />
         <Text style={styles.date}>
-          {moment(props.data.createdAt).format('DD MMMM YYYY')}
+          {/* {moment(props.data.createdAt).format('DD MMMM YYYY')} */}
+          {moment(props.data.createdAt).calendar().search('Yesterday') > -1
+            ? moment(props.data.createdAt).calendar().substring(0, 9)
+            : moment(props.data.createdAt).calendar().search('Today') > -1
+            ? moment(props.data.createdAt).calendar().substring(0, 5)
+            : moment(props.data.createdAt).format('DD MMMM YYYY')}
         </Text>
         {isWithdrawal ? (
           <Text style={styles.withdrawalText}>Withdrawal</Text>

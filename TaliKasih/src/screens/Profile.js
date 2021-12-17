@@ -25,7 +25,7 @@ const Profile = props => {
       props.getMyCampaign();
       props.getMyDonation();
     }
-  }, [props.token]);
+  }, [props.token, props.dataCampaign, props.dataDonate]);
 
   if (props.token === null) {
     return <Auth navigation={props.navigation} />;
@@ -110,6 +110,8 @@ const reduxState = state => ({
   token: state.auth.token,
   dataMyCampaign: state.taliKasih.dataMyCampaign,
   dataMyDonation: state.taliKasih.dataMyDonation,
+  dataCampaign: state.taliKasih.dataCampaign,
+  dataDonate: state.taliKasih.dataDonate,
   loading: state.taliKasih.isLoading,
 });
 

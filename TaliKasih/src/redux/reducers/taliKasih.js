@@ -41,11 +41,17 @@ const initialState = {
   dataRemainingTime: '',
   dataMyCampaign: [],
   dataMyDonation: [],
-  dataSearch: [],
+  dataSearch: null,
+  keyword: null,
+  selection: null,
   dataFilter: [],
+  dataCampaignByCategory: null,
   filter: false,
-  dataCampaign: [],
+  dataCampaign: null,
   dataMyComment: [],
+  dataDonate: null,
+  dataPaymentDetail: null,
+  campaignId: null,
   error: null,
   isLoading: false,
 };
@@ -159,12 +165,16 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataSearch: action.data,
+        keyword: action.keyword,
+        selection: action.selection,
         error: action.error,
       };
     case 'SEARCH_CAMPAIGN_FAILED':
       return {
         ...state,
         isLoading: false,
+        keyword: action.keyword,
+        selection: action.selection,
         error: action.error,
       };
     case 'FILTER_CAMPAIGN':
@@ -195,6 +205,26 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         filter: action.data,
+      };
+    case 'GET_CAMPAIGN_BY_CATEGORY':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'GET_CAMPAIGN_BY_CATEGORY_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dataCampaignByCategory: action.data,
+        selection: action.selection,
+        error: action.error,
+      };
+    case 'GET_CAMPAIGN_BY_CATEGORY_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        selection: action.selection,
+        error: action.error,
       };
     case 'CREATE_CAMPAIGN':
       return {
@@ -248,6 +278,54 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.error,
+      };
+    case 'CREATE_DONATION':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'CREATE_DONATION_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dataDonate: action.dataDonate,
+        dataPaymentDetail: action.paymentDetail,
+        error: action.error,
+      };
+    case 'CREATE_DONATION_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'EDIT_CAMPAIGN':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'EDIT_CAMPAIGN_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dataCampaign: action.data,
+        error: action.error,
+      };
+    case 'EDIT_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'SET_CAMPAIGN_ID':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'SET_CAMPAIGN_ID_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        campaignId: action.data,
       };
     default:
       return state;

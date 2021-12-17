@@ -27,7 +27,7 @@ const FooterButton = props => {
               'TaliKasih',
               'Please fill the amount and withdrawal purpose!',
             );
-          } else if (props.data.amount && props.data.wdPurpose) {
+          } else if (props.data.amount && props.data.update) {
             props.updateCampaignProgress(
               props.data,
               props.navigation,

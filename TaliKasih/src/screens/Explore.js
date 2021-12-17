@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -72,7 +73,11 @@ const Explore = props => {
             />
             <TouchableOpacity
               style={styles.searchIconContainer}
-              onPress={() => props.searchCampaign(search)}>
+              onPress={() => {
+                if (search) {
+                  props.searchCampaign(search);
+                }
+              }}>
               <Ionicons name="search" size={hp('3.5%')} color="#1D94A8" />
             </TouchableOpacity>
           </View>
@@ -89,6 +94,8 @@ const Explore = props => {
                   onPress={() => {
                     setCategory(item.name);
                     setIsCategoryFocused(item.name);
+                    setSearch();
+                    props.getCampaignByCategory(item.id_category);
                   }}>
                   <Image source={item.img} style={styles.categoryCardImg} />
                   <Text style={styles.categoryCardText}>{item.name}</Text>
@@ -96,8 +103,34 @@ const Explore = props => {
               </View>
             ))}
           </View>
-          <Text style={styles.titleCardText}>Recently searched</Text>
-          {props.error === null ? (
+
+          {props.dataSearch !== null &&
+          props.keyword !== null &&
+          props.keyword == search &&
+          props.selection == 'search' ? (
+            <Text
+              style={
+                styles.titleCardText
+              }>{`Showing ${props.dataSearch.length} Results for "${search}"`}</Text>
+          ) : props.dataCamp !== null &&
+            props.selection == 'category' &&
+            isCategoryFocused ? (
+            <View style={styles.filterContainer}>
+              <View style={styles.filterCategoryContainer}>
+                <Text style={styles.filterCategoryText}>
+                  {props.dataCamp[0].category.category}
+                </Text>
+              </View>
+              <Text style={styles.filterTitle}>
+                {props.dataCamp[0].category.quotes}
+              </Text>
+            </View>
+          ) : null}
+
+          {props.error === null &&
+          props.keyword !== null &&
+          props.keyword == search &&
+          props.selection == 'search' ? (
             <FlatList
               data={props.dataSearch}
               horizontal={true}
@@ -115,9 +148,35 @@ const Explore = props => {
               initialNumToRender={4}
               maxToRenderPerBatch={10}
             />
-          ) : (
-            <Text style={styles.errorMsg}>{props.error}</Text>
-          )}
+          ) : props.error == 'Events not found' &&
+            props.keyword !== null &&
+            props.keyword == search &&
+            props.selection == 'search' ? (
+            <Text
+              style={
+                styles.titleCardText
+              }>{`Showing ${0} Results for "${search}"`}</Text>
+          ) : props.error === null &&
+            props.selection == 'category' &&
+            isCategoryFocused ? (
+            <FlatList
+              data={props.dataCamp}
+              horizontal={true}
+              numColumns={1}
+              showsHorizontalScrollIndicator={false}
+              renderItem={data => (
+                <View>
+                  <CardCampaign
+                    data={data.item}
+                    navigation={props.navigation}
+                  />
+                </View>
+              )}
+              keyExtractor={(item, i) => i}
+              initialNumToRender={4}
+              maxToRenderPerBatch={10}
+            />
+          ) : null}
         </View>
       </ScrollView>
     </View>
@@ -126,12 +185,17 @@ const Explore = props => {
 
 const reduxState = state => ({
   dataSearch: state.taliKasih.dataSearch,
+  keyword: state.taliKasih.keyword,
+  dataCamp: state.taliKasih.dataCampaignByCategory,
+  selection: state.taliKasih.selection,
   loading: state.taliKasih.isLoading,
   error: state.taliKasih.error,
 });
 
 const reduxDispatch = dispatch => ({
-  searchCampaign: b => dispatch({type: 'SEARCH_CAMPAIGN', value: b}),
+  searchCampaign: a => dispatch({type: 'SEARCH_CAMPAIGN', value: a}),
+  getCampaignByCategory: b =>
+    dispatch({type: 'GET_CAMPAIGN_BY_CATEGORY', value: b}),
 });
 
 export default connect(reduxState, reduxDispatch)(Explore);
@@ -227,12 +291,39 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     fontSize: hp('2.7%'),
     color: '#000000',
-    textDecorationLine: 'underline',
     marginBottom: 10,
   },
   errorMsg: {
     fontFamily: 'Nunito-Regular',
     fontSize: hp('2.4%'),
     color: '#1D94A8',
+  },
+  filterContainer: {
+    flex: 1,
+    backgroundColor: '#FAF8F3',
+  },
+  filterCategoryContainer: {
+    width: wp('32%'),
+    borderRadius: 4,
+    borderWidth: 1.5,
+    borderColor: '#A43F3C',
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    marginBottom: 10,
+  },
+  filterCategoryText: {
+    fontSize: hp('2%'),
+    fontFamily: 'Nunito-Bold',
+    color: '#A43F3C',
+  },
+  filterTitle: {
+    fontSize: hp('3%'),
+    fontFamily: 'Nunito-Bold',
+    color: '#000000',
+    marginBottom: 15,
+    lineHeight: hp('4%'),
   },
 });

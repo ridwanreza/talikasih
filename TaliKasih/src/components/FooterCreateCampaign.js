@@ -28,7 +28,15 @@ const FooterButton = props => {
           dataCampaign.append('dueDate', props.data.dueDate);
           dataCampaign.append('story', props.data.story);
           dataCampaign.append('categoryId', props.data.categoryId);
-          props.createCampaign(dataCampaign, props.navigation);
+          if (props.campaignId !== null) {
+            props.editCampaign(
+              dataCampaign,
+              props.campaignId,
+              props.navigation,
+            );
+          } else {
+            props.createCampaign(dataCampaign, props.navigation);
+          }
         }
       }}>
       <Text style={styles.buttonText}>{props.name}</Text>
@@ -39,6 +47,8 @@ const FooterButton = props => {
 const reduxDispatch = dispatch => ({
   createCampaign: (a, b) =>
     dispatch({type: 'CREATE_CAMPAIGN', data: a, navigation: b}),
+  editCampaign: (c, d, e) =>
+    dispatch({type: 'EDIT_CAMPAIGN', data: c, value: d, navigation: e}),
 });
 
 export default connect(null, reduxDispatch)(FooterButton);

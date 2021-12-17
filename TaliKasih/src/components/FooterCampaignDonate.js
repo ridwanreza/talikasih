@@ -4,6 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {connect} from 'react-redux';
 
 const FooterButton = props => {
   return (
@@ -16,7 +17,7 @@ const FooterButton = props => {
             'Please fill the required data above and select payment!',
           );
         } else if (props.selected) {
-          props.navigation.navigate('Main', {screen: 'Donate'});
+          props.createDonate(props.data, props.campaignId);
         }
       }}>
       <Text style={styles.buttonText}>{props.name}</Text>
@@ -24,7 +25,12 @@ const FooterButton = props => {
   );
 };
 
-export default FooterButton;
+const reduxDispatch = dispatch => ({
+  createDonate: (a, b) =>
+    dispatch({type: 'CREATE_DONATION', data: a, value: b}),
+});
+
+export default connect(null, reduxDispatch)(FooterButton);
 
 const styles = StyleSheet.create({
   container: {

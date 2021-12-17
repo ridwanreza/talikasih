@@ -149,6 +149,8 @@ function* searchCampaign(action) {
       yield put({
         type: 'SEARCH_CAMPAIGN_SUCCESS',
         data: resCampaign.data.campaigns,
+        keyword: action.value,
+        selection: 'search',
         error: null,
       });
     }
@@ -156,6 +158,8 @@ function* searchCampaign(action) {
     console.log(err);
     yield put({
       type: 'SEARCH_CAMPAIGN_FAILED',
+      keyword: action.value,
+      selection: 'search',
       error: err.response.data.errors,
     });
   }
@@ -184,8 +188,37 @@ function* filterCampaign(action) {
   }
 }
 
+function* getCampaignByCategory(action) {
+  try {
+    const resCampaign = yield axios({
+      method: 'GET',
+      url: `https://api-talikasih.herokuapp.com/discover/category?kategori=${action.value}`,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'GET_CAMPAIGN_BY_CATEGORY_SUCCESS',
+        data: resCampaign.data.campaigns,
+        selection: 'category',
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'GET_CAMPAIGN_BY_CATEGORY_FAILED',
+      selection: 'category',
+      error: err.response.data.errors,
+    });
+  }
+}
+
 function* setFilter(action) {
   yield put({type: 'FILTER_SUCCESS', data: action.data});
+}
+
+function* setCampaignId(action) {
+  yield put({type: 'SET_CAMPAIGN_ID_SUCCESS', data: action.data});
+  action.navigation.navigate('Create Campaign');
 }
 
 function* createCampaign(action) {
@@ -273,6 +306,64 @@ function* updateCampaignProgress(action) {
   }
 }
 
+function* createDonation(action) {
+  try {
+    const token = yield getToken();
+
+    const resCampaign = yield axios({
+      method: 'POST',
+      url: `https://api-talikasih.herokuapp.com/charge/${action.value}`,
+      headers: {
+        access_token: token,
+      },
+      data: action.data,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'CREATE_DONATION_SUCCESS',
+        dataDonate: resCampaign.data.dataDonate,
+        paymentDetail: resCampaign.data.paymentDetail,
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'CREATE_DONATION_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
+function* editCampaign(action) {
+  try {
+    const token = yield getToken();
+
+    const resCampaign = yield axios({
+      method: 'PATCH',
+      url: `https://api-talikasih.herokuapp.com/discover/edit/${action.value}`,
+      headers: {
+        access_token: token,
+      },
+      data: action.data,
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'EDIT_CAMPAIGN_SUCCESS',
+        data: resCampaign.data.data,
+        error: null,
+      });
+      action.navigation.navigate('Main', {screen: 'Donate'});
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'EDIT_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
 function* taliKasihSaga() {
   yield takeLatest('GET_CAMPAIGN', getCampaign);
   yield takeLatest('GET_CAMPAIGN_DETAIL', getCampaignDetail);
@@ -282,9 +373,13 @@ function* taliKasihSaga() {
   yield takeLatest('SEARCH_CAMPAIGN', searchCampaign);
   yield takeLatest('FILTER_CAMPAIGN', filterCampaign);
   yield takeLatest('FILTER', setFilter);
+  yield takeLatest('GET_CAMPAIGN_BY_CATEGORY', getCampaignByCategory);
   yield takeLatest('CREATE_CAMPAIGN', createCampaign);
   yield takeLatest('CREATE_COMMENT', createComment);
   yield takeLatest('UPDATE_CAMPAIGN_PROGRESS', updateCampaignProgress);
+  yield takeLatest('CREATE_DONATION', createDonation);
+  yield takeLatest('EDIT_CAMPAIGN', editCampaign);
+  yield takeLatest('SET_CAMPAIGN_ID', setCampaignId);
 }
 
 export default taliKasihSaga;

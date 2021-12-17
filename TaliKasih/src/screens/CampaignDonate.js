@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -16,6 +17,21 @@ import {
 import Footer from '../components/FooterCampaignDonate';
 import Clipboard from '@react-native-clipboard/clipboard';
 import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {connect} from 'react-redux';
+
+const Toast = ({visible, message}) => {
+  if (visible) {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50,
+    );
+    return null;
+  }
+  return null;
+};
 
 const CampaignDonate = props => {
   const [amount, setAmount] = useState();
@@ -23,13 +39,36 @@ const CampaignDonate = props => {
   const [message, setMessage] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
-  const [accNum, setAccNum] = useState('1234 5678 90');
+  const [accNum, setAccNum] = useState();
+  const [method, setMethod] = useState();
+  const [visibleToast, setvisibleToast] = useState(false);
+  const [visibleAmountToast, setVisibleAmountToast] = useState(false);
+  const [campaignId, setCampaignId] = useState(props.route.params.campaignId);
+
+  useEffect(() => setvisibleToast(false), [visibleToast]);
+  useEffect(() => setVisibleAmountToast(false), [visibleAmountToast]);
+
+  const handleButtonPress = () => {
+    setvisibleToast(true);
+  };
+
+  const handleButtonAmtPress = () => {
+    setVisibleAmountToast(true);
+  };
 
   const dataDonate = {
     amount,
     name,
     message,
+    method,
   };
+
+  useEffect(() => {
+    if (props.dataDonate !== null) {
+      setAccNum(props.dataPaymentDetail.va_numbers[0].va_number);
+      setAmount(props.dataDonate.amount);
+    }
+  }, [props.dataDonate]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
@@ -45,7 +84,7 @@ const CampaignDonate = props => {
             placeholderTextColor="#9F9F9F"
             keyboardType="numeric"
             editable={isSelected ? false : true}
-            value={amount}
+            value={amount !== undefined ? `${amount}` : null}
             onChangeText={value => setAmount(value)}
           />
           <View style={styles.arrange}>
@@ -109,12 +148,13 @@ const CampaignDonate = props => {
                 );
               } else if (amount && name && message) {
                 setIsSelected(!isSelected);
+                setMethod('Bank Transfer');
               }
             }}>
             <MCIcons name="bank" style={styles.iconBank} />
             <Text style={styles.iconText}>Bank Transfer</Text>
           </TouchableOpacity>
-          {isSelected ? (
+          {isSelected && props.dataDonate !== null ? (
             <View style={styles.transferInfoContainer}>
               <Text style={styles.transferText}>Transfer to</Text>
               <View style={styles.arrangeTransfer}>
@@ -122,13 +162,11 @@ const CampaignDonate = props => {
                   <Text style={styles.transferInfo}>Account Number</Text>
                   <Text style={styles.transferInfoValue}>{accNum}</Text>
                 </View>
+                <Toast visible={visibleToast} message="Acc Number copied!" />
                 <TouchableOpacity
                   onPress={() => {
                     Clipboard.setString(accNum);
-                    Alert.alert(
-                      'TaliKasih',
-                      'Copied to clipboard successfully.',
-                    );
+                    handleButtonPress();
                   }}>
                   <Text style={styles.copyText}>COPY</Text>
                 </TouchableOpacity>
@@ -143,13 +181,11 @@ const CampaignDonate = props => {
                   <Text
                     style={styles.transferInfoValue}>{`Rp. ${amount}`}</Text>
                 </View>
+                <Toast visible={visibleAmountToast} message="Amount copied!" />
                 <TouchableOpacity
                   onPress={() => {
                     Clipboard.setString(amount);
-                    Alert.alert(
-                      'TaliKasih',
-                      'Copied to clipboard successfully.',
-                    );
+                    handleButtonAmtPress();
                   }}>
                   <Text style={styles.copyText}>COPY</Text>
                 </TouchableOpacity>
@@ -159,16 +195,23 @@ const CampaignDonate = props => {
         </View>
       </ScrollView>
       <Footer
-        name={'DONATE'}
+        name={props.loading == true ? 'Loading...' : 'DONATE'}
         data={dataDonate}
         selected={isSelected}
+        campaignId={campaignId}
         navigation={props.navigation}
       />
     </View>
   );
 };
 
-export default CampaignDonate;
+const reduxState = state => ({
+  loading: state.taliKasih.isLoading,
+  dataDonate: state.taliKasih.dataDonate,
+  dataPaymentDetail: state.taliKasih.dataPaymentDetail,
+});
+
+export default connect(reduxState, null)(CampaignDonate);
 
 const styles = StyleSheet.create({
   container: {

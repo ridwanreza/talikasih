@@ -20,12 +20,19 @@ import CardUpdates from '../components/CardUpdates';
 import CardDonation from '../components/CardDonation';
 import CardComment from '../components/CardComment';
 import CardCampaign from '../components/CardCampaign';
+import Modal from 'react-native-modal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Footer from '../components/FooterCampaignDetail';
 import {connect} from 'react-redux';
 
 const CampaignDetails = props => {
   const [comment, setComment] = useState();
   const [id, setId] = useState();
+  const [isModalManageVisible, setIsModalManageVisible] = useState(false);
+
+  const toggleModalManage = () => {
+    setIsModalManageVisible(!isModalManageVisible);
+  };
 
   useEffect(() => {
     props.getCampaignDetail(props.route.params.campaignId);
@@ -69,6 +76,41 @@ const CampaignDetails = props => {
             />
           </View>
         </View>
+
+        {props.dataUser.id === props.detail.userId ? (
+          <TouchableOpacity onPress={toggleModalManage}>
+            <Text style={styles.manageText}>Manage Campaign</Text>
+          </TouchableOpacity>
+        ) : null}
+
+        <Modal
+          isVisible={isModalManageVisible}
+          testID={'modal'}
+          style={styles.viewModal}>
+          <View style={styles.viewModalContainer}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalHeaderTitle}>Manage Campaign</Text>
+              <TouchableOpacity title="Hide modal" onPress={toggleModalManage}>
+                <Ionicons name="close" size={hp('3.5%')} color={'#000000'} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalContent}>
+              <TouchableOpacity
+                onPress={() => {
+                  props.setCampaignId(id, props.navigation);
+                }}>
+                <Text style={styles.modalContentText}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.modalContentText}>Close Campaign</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.modalContentDelete}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
         <View style={styles.storyContainer}>
           <Text style={styles.storyTitle}>The Story</Text>
           <Text style={styles.storyText}>{props.detail.story}</Text>
@@ -158,6 +200,7 @@ const reduxState = state => ({
   dataRelated: state.taliKasih.dataRelated,
   dataRemainingTime: state.taliKasih.dataRemainingTime,
   dataMyComment: state.taliKasih.dataMyComment,
+  dataUser: state.auth.dataUser,
   loading: state.taliKasih.isLoading,
   token: state.auth.token,
 });
@@ -167,6 +210,8 @@ const reduxDispatch = dispatch => ({
   getRelatedCampaign: b => dispatch({type: 'GET_RELATED_CAMPAIGN', value: b}),
   createComment: (c, d) =>
     dispatch({type: 'CREATE_COMMENT', data: c, value: d}),
+  setCampaignId: (e, f) =>
+    dispatch({type: 'SET_CAMPAIGN_ID', data: e, navigation: f}),
 });
 
 export default connect(reduxState, reduxDispatch)(CampaignDetails);
@@ -182,7 +227,8 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
   },
   cardContainer: {
-    paddingVertical: hp('3%'),
+    paddingTop: hp('3%'),
+    paddingBottom: hp('2%'),
     paddingHorizontal: wp('5%'),
   },
   title: {
@@ -271,5 +317,49 @@ const styles = StyleSheet.create({
     color: '#000000',
     textDecorationLine: 'underline',
     marginBottom: 10,
+  },
+  manageText: {
+    fontFamily: 'Nunito-Bold',
+    fontSize: hp('2.2%'),
+    color: '#000000',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    marginBottom: 20,
+  },
+  viewModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  viewModalContainer: {
+    width: wp('100%'),
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: wp('4%'),
+    paddingVertical: hp('1.5%'),
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: hp('3%'),
+  },
+  modalHeaderTitle: {
+    fontSize: hp('2.6%'),
+    fontFamily: 'Nunito-Bold',
+    color: '#000000',
+  },
+  modalContent: {
+    paddingHorizontal: wp('2%'),
+    marginBottom: 10,
+  },
+  modalContentText: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2.4%'),
+    color: '#000000',
+    marginBottom: hp('2.4%'),
+  },
+  modalContentDelete: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2.4%'),
+    color: '#A43F3C',
   },
 });
