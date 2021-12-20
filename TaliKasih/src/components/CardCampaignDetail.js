@@ -17,6 +17,10 @@ const CardCampaignDetail = props => {
       <Text
         style={
           styles.raisedText
+        }>{`Available funds IDR ${props.data.collected} `}</Text>
+      <Text
+        style={
+          styles.raisedText
         }>{`Raised from IDR ${props.data.goal} goal`}</Text>
       <View style={styles.progressContainer}>
         <ProgressBar
@@ -60,7 +64,7 @@ export default CardCampaignDetail;
 const styles = StyleSheet.create({
   container: {
     width: wp('90%'),
-    height: hp('34%'),
+    height: hp('37%'),
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     paddingVertical: hp('2.6%'),

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,17 +16,42 @@ import {
 import Logo from '../assets/images/logo_vertical.png';
 import Google from '../assets/images/Google.png';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 
 const Login = props => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [hidePass, setHidePass] = useState(true);
+  const [newPass, setNewPass] = useState();
+  const [confirmNewPass, setConfirmNewPass] = useState();
+  const [hideNewPass, setHideNewPass] = useState(true);
+  const [hideConfirmNewPass, setHideConfirmNewPass] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
   const dataLogin = {
     email,
     password,
   };
+
+  const dataForgotPass = {
+    email,
+  };
+
+  const dataResetPass = {
+    password: newPass,
+    confirmPassword: confirmNewPass,
+  };
+
+  useEffect(() => {
+    if (props.forgotToken !== null) {
+      toggleModal();
+    }
+  }, [props.forgotToken]);
 
   return (
     <View style={styles.container}>
@@ -64,9 +89,84 @@ const Login = props => {
               <Text style={styles.errorMsg}>{props.error}</Text>
             </View>
           ) : null}
-          <TouchableOpacity style={styles.forgotButton}>
-            <Text style={styles.forgotText}>forgot password?</Text>
+          <TouchableOpacity
+            style={styles.forgotButton}
+            onPress={() => {
+              if (email) {
+                props.forgotPass(dataForgotPass);
+              } else if (!email) {
+                Alert.alert('TaliKasih', 'Please fill in email first!');
+              }
+            }}>
+            <Text style={styles.forgotText}>
+              {props.forLoading
+                ? 'Requesting reset password...'
+                : 'forgot password?'}
+            </Text>
           </TouchableOpacity>
+          <Modal
+            isVisible={isModalVisible}
+            testID={'modal'}
+            style={styles.viewModal}>
+            <View style={styles.viewModalContainer}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalHeaderTitle}>Reset Password</Text>
+                <TouchableOpacity title="Hide modal" onPress={toggleModal}>
+                  <Ionicons name="close" size={hp('3.5%')} color={'#000000'} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.modalContent}>
+                <View style={styles.passContainer}>
+                  <TextInput
+                    style={styles.textInputPass}
+                    placeholder="New password"
+                    placeholderTextColor="#9F9F9F"
+                    secureTextEntry={hideNewPass ? true : false}
+                    value={newPass}
+                    onChangeText={value => setNewPass(value)}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setHideNewPass(!hideNewPass)}>
+                    <Ionicons
+                      name={hideNewPass ? 'eye-off-outline' : 'eye-outline'}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.passContainer}>
+                  <TextInput
+                    style={styles.textInputPass}
+                    placeholder="Confirm new password"
+                    placeholderTextColor="#9F9F9F"
+                    secureTextEntry={hideConfirmNewPass ? true : false}
+                    value={confirmNewPass}
+                    onChangeText={value => setConfirmNewPass(value)}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setHideConfirmNewPass(!hideConfirmNewPass)}>
+                    <Ionicons
+                      name={
+                        hideConfirmNewPass ? 'eye-off-outline' : 'eye-outline'
+                      }
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    props.resetPass(dataResetPass, props.forgotToken);
+                    if (props.resLoading == false) {
+                      toggleModal();
+                    }
+                  }}>
+                  <Text style={styles.buttonText}>
+                    {props.resLoading == true ? `RESETTING...` : `RESET`}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -80,7 +180,7 @@ const Login = props => {
               }
             }}>
             <Text style={styles.buttonText}>
-              {props.isLoading == true ? `Loading...` : `LOGIN`}
+              {props.isLoading == true ? `Logging In...` : `LOGIN`}
             </Text>
           </TouchableOpacity>
           <View style={styles.accountContainer}>
@@ -107,10 +207,16 @@ const Login = props => {
 const reduxState = state => ({
   isLoading: state.auth.isLoading,
   error: state.auth.error,
+  forgotToken: state.auth.forgotToken,
+  forLoading: state.auth.forLoading,
+  resLoading: state.auth.resLoading,
 });
 
 const reduxDispatch = dispatch => ({
   login: (a, b) => dispatch({type: 'LOGIN', data: a, navigation: b}),
+  forgotPass: c => dispatch({type: 'FORGOT_PASS_REQUEST', data: c}),
+  resetPass: (d, e) =>
+    dispatch({type: 'RESET_PASS_REQUEST', data: d, value: e}),
 });
 
 export default connect(reduxState, reduxDispatch)(Login);
@@ -254,5 +360,32 @@ const styles = StyleSheet.create({
     height: hp('6%'),
     width: wp('6%'),
     resizeMode: 'contain',
+  },
+  viewModal: {
+    justifyContent: 'center',
+    margin: 0,
+  },
+  viewModalContainer: {
+    width: wp('100%'),
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: wp('4%'),
+    paddingVertical: hp('1.5%'),
+    borderRadius: 10,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: hp('3%'),
+  },
+  modalHeaderTitle: {
+    fontSize: hp('2.6%'),
+    fontFamily: 'Nunito-Bold',
+    color: '#000000',
+  },
+  modalContent: {
+    alignItems: 'center',
+    paddingHorizontal: wp('2%'),
+    marginBottom: 10,
   },
 });

@@ -1,35 +1,4 @@
 const initialState = {
-  dataCampaignDetailUpdates: [
-    {
-      id: 1,
-      date: 'TODAY',
-      updateCat: 'Non-Withdrawal',
-      story:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. Sagittis quisque non, nullam facilisis. ',
-    },
-    {
-      id: 2,
-      date: 'YESTERDAY',
-      updateCat: 'Withdrawal',
-      amount: 20000000,
-      story: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-    },
-    {
-      id: 3,
-      date: '3 Oktober 2020',
-      updateCat: 'Withdrawal',
-      amount: 20000000,
-      story: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-    },
-    {
-      id: 4,
-      date: '30 September 2020',
-      updateCat: 'Non-Withdrawal',
-      story:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. Sagittis quisque non, nullam facilisis. ',
-    },
-  ],
-
   dataNewest: [],
   dataUrgent: [],
   dataGainedMomentum: [],
@@ -38,7 +7,7 @@ const initialState = {
   dataDonator: [],
   dataComment: [],
   dataRelated: [],
-  dataRemainingTime: '',
+  dataRemainingTime: null,
   dataMyCampaign: [],
   dataMyDonation: [],
   dataSearch: null,

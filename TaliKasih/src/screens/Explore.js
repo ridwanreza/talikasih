@@ -75,6 +75,7 @@ const Explore = props => {
               style={styles.searchIconContainer}
               onPress={() => {
                 if (search) {
+                  setIsCategoryFocused();
                   props.searchCampaign(search);
                 }
               }}>

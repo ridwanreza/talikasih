@@ -52,12 +52,12 @@ const CardUpdates = props => {
       <View style={styles.timelineArrange}>
         <Entypo name="dot-single" style={styles.dot} />
         <Text style={styles.date}>
-          {/* {moment(props.data.createdAt).format('DD MMMM YYYY')} */}
-          {moment(props.data.createdAt).calendar().search('Yesterday') > -1
+          {props.data.updateTime}
+          {/* {moment(props.data.createdAt).calendar().search('Yesterday') > -1
             ? moment(props.data.createdAt).calendar().substring(0, 9)
             : moment(props.data.createdAt).calendar().search('Today') > -1
             ? moment(props.data.createdAt).calendar().substring(0, 5)
-            : moment(props.data.createdAt).format('DD MMMM YYYY')}
+            : moment(props.data.createdAt).format('DD MMMM YYYY')} */}
         </Text>
         {isWithdrawal ? (
           <Text style={styles.withdrawalText}>Withdrawal</Text>

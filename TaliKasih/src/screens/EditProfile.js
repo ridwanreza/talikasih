@@ -17,16 +17,14 @@ import Footer from '../components/FooterEditProfile';
 import {connect} from 'react-redux';
 
 const EditProfile = props => {
-  const [name, setName] = useState(props.dataUser.name);
-  const [email, setEmail] = useState(props.dataUser.email);
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
   const [newPass, setNewPass] = useState();
   const [confirmNewPass, setConfirmNewPass] = useState();
-  const [bankName, setBankName] = useState(props.dataUser.bankName);
-  const [bankAccNumber, setBankAccNumber] = useState(
-    `${props.dataUser.bankAccount}`,
-  );
-  const [img, setImg] = useState(props.dataUser.image.replace(/\s+/g, ''));
-  const [resetPass, setResetPass] = useState(resetPass);
+  const [bankName, setBankName] = useState();
+  const [bankAccNumber, setBankAccNumber] = useState();
+  const [img, setImg] = useState();
+  const [resetPass, setResetPass] = useState(false);
   const [rawImage, setRawImage] = useState();
 
   const option = {
@@ -71,6 +69,17 @@ const EditProfile = props => {
     bankName: bankName,
     bankAccount: bankAccNumber,
   };
+
+  useEffect(() => {
+    if (props.dataUser !== null) {
+      setName(props.dataUser.name);
+      setEmail(props.dataUser.email);
+      setBankName(props.dataUser.bankName);
+      setBankAccNumber(props.dataUser.bankAccount);
+      setRawImage(props.dataUser.image.replace(/\s+/g, ''));
+      setImg(props.dataUser.image.replace(/\s+/g, ''));
+    }
+  }, [props.dataUser]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
@@ -126,7 +135,7 @@ const EditProfile = props => {
               />
             </View>
           ) : (
-            <TouchableOpacity onPress={() => setResetPass(!resetPass)}>
+            <TouchableOpacity onPress={() => setResetPass(true)}>
               <Text style={styles.resetText}>Reset password</Text>
             </TouchableOpacity>
           )}
@@ -159,6 +168,7 @@ const EditProfile = props => {
       <Footer
         name={props.loading === true ? 'Loading...' : 'SAVE CHANGES'}
         data={resetPass ? dataProfileFull : dataProfile}
+        isResetPass={resetPass}
         navigation={props.navigation}
       />
     </View>

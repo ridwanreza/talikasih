@@ -12,20 +12,36 @@ const FooterButton = props => {
       style={styles.container}
       onPress={() => {
         if (
-          !props.data.name ||
-          !props.data.email ||
-          !props.data.image ||
-          !props.data.bankName ||
-          !props.data.bankAccount
+          props.isResetPass == false &&
+          (!props.data.name ||
+            !props.data.email ||
+            !props.data.image ||
+            !props.data.bankName ||
+            !props.data.bankAccount)
         ) {
           Alert.alert('TaliKasih', 'Please fill the required data above!');
-        } else if (props.data) {
+        } else if (
+          props.isResetPass == true &&
+          (!props.data.password || !props.data.confirmPassword)
+        ) {
+          Alert.alert('TaliKasih', 'Please fill the required data above!');
+        } else if (props.isResetPass == false && props.data) {
           const dataProfile = new FormData();
           dataProfile.append('name', props.data.name);
           dataProfile.append('email', props.data.email);
           dataProfile.append('image', props.data.image);
           dataProfile.append('bankName', props.data.bankName);
           dataProfile.append('bankAccount', props.data.bankAccount);
+          props.updateUser(dataProfile, props.navigation);
+        } else if (props.isResetPass == true && props.data) {
+          const dataProfile = new FormData();
+          dataProfile.append('name', props.data.name);
+          dataProfile.append('email', props.data.email);
+          dataProfile.append('image', props.data.image);
+          dataProfile.append('bankName', props.data.bankName);
+          dataProfile.append('bankAccount', props.data.bankAccount);
+          dataProfile.append('password', props.data.password);
+          dataProfile.append('confirmPassword', props.data.confirmPassword);
           props.updateUser(dataProfile, props.navigation);
         }
       }}>

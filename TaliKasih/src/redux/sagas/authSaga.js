@@ -39,8 +39,6 @@ const getToken = async () => {
 
 function* register(action) {
   try {
-    console.log('START REGISTER');
-
     const resRegister = yield axios({
       method: 'POST',
       url: `https://api-talikasih.herokuapp.com/register`,
@@ -64,8 +62,6 @@ function* register(action) {
 
 function* login(action) {
   try {
-    console.log('START LOGIN');
-
     const resLogin = yield axios({
       method: 'POST',
       url: `https://api-talikasih.herokuapp.com/login`,
@@ -157,11 +153,57 @@ function* updateUser(action) {
         error: null,
       });
       action.navigation.navigate('Main', {screen: 'My Account'});
-      //console.log(resUser.data.data);
     }
   } catch (err) {
     console.log(err);
     yield put({type: 'UPDATE_USER_FAILED', error: err.response.data.errors});
+  }
+}
+
+function* forgotPass(action) {
+  try {
+    const resForgotPass = yield axios({
+      method: 'POST',
+      url: `https://api-talikasih.herokuapp.com/forgotPassword`,
+      data: action.data,
+    });
+
+    if (resForgotPass && resForgotPass.data) {
+      yield put({
+        type: 'FORGOT_PASS_REQUEST_SUCCESS',
+        forgotToken: resForgotPass.data.userId,
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'FORGOT_PASS_REQUEST_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
+function* resetPass(action) {
+  try {
+    const resResetPass = yield axios({
+      method: 'PATCH',
+      url: `https://api-talikasih.herokuapp.com/resetPassword/${action.value}`,
+      data: action.data,
+    });
+
+    if (resResetPass && resResetPass.data) {
+      yield put({
+        type: 'RESET_PASS_REQUEST_SUCCESS',
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'RESET_PASS_REQUEST_FAILED',
+      error: err.response.data.errors,
+    });
   }
 }
 
@@ -172,6 +214,8 @@ function* authSaga() {
   yield takeLatest('GET_USER', getUser);
   yield takeLatest('UPDATE_USER', updateUser);
   yield takeLatest('GET_TOKEN', getTokenLatest);
+  yield takeLatest('FORGOT_PASS_REQUEST', forgotPass);
+  yield takeLatest('RESET_PASS_REQUEST', resetPass);
 }
 
 export default authSaga;

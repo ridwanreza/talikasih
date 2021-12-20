@@ -14,7 +14,6 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import defaultProfile from '../assets/images/defaultProfile.png';
 import Auth from '../components/Auth';
 import {connect} from 'react-redux';
 
@@ -51,7 +50,7 @@ const Profile = props => {
             source={
               props.dataUser.image
                 ? {uri: props.dataUser.image.replace(/\s+/g, '')}
-                : defaultProfile
+                : null
             }
             style={styles.avatar}
           />

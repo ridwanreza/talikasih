@@ -1,8 +1,11 @@
 const initialState = {
   isLoading: false,
-  dataUser: {},
+  dataUser: null,
   error: null,
   token: null,
+  forgotToken: null,
+  forLoading: false,
+  resLoading: false,
 };
 
 const auth = (state = initialState, action) => {
@@ -105,6 +108,41 @@ const auth = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        error: action.error,
+      };
+    case 'FORGOT_PASS_REQUEST':
+      return {
+        ...state,
+        forLoading: true,
+      };
+    case 'FORGOT_PASS_REQUEST_SUCCESS':
+      return {
+        ...state,
+        forLoading: false,
+        forgotToken: action.forgotToken,
+        error: action.error,
+      };
+    case 'FORGOT_PASS_REQUEST_FAILED':
+      return {
+        ...state,
+        forLoading: false,
+        error: action.error,
+      };
+    case 'RESET_PASS_REQUEST':
+      return {
+        ...state,
+        resLoading: true,
+      };
+    case 'RESET_PASS_REQUEST_SUCCESS':
+      return {
+        ...state,
+        resLoading: false,
+        error: action.error,
+      };
+    case 'RESET_PASS_REQUEST_FAILED':
+      return {
+        ...state,
+        resLoading: false,
         error: action.error,
       };
     default:
