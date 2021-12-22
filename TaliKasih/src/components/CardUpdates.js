@@ -31,7 +31,7 @@ import Timeline from 'react-native-timeline-flatlist';
 
 const CardUpdates = props => {
   const [isWithdrawal, setIsWithdrawal] = useState(
-    props.data.amount !== null ? true : false,
+    props.data.amount !== 0 ? true : false,
   );
 
   return (
@@ -68,7 +68,8 @@ const CardUpdates = props => {
       <View style={styles.timelineContainer}>
         {isWithdrawal ? (
           <View style={styles.contentContainerWd}>
-            <Text style={styles.wdAmount}>{`Rp. ${props.data.amount}`}</Text>
+            <Text
+              style={styles.wdAmount}>{`${props.data.jumlahWithdrawl}`}</Text>
             <Text style={styles.wdPurposeText}>Withdrawal Purpose</Text>
             <Text style={styles.wdStory}>{props.data.update}</Text>
           </View>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {connect} from 'react-redux';
 import Footer from '../components/FooterFundraiseUpdate';
 
 const FundraiseUpdate = props => {
@@ -21,6 +22,7 @@ const FundraiseUpdate = props => {
   const [amount, setAmount] = useState();
   const [wdPurpose, setWdPurpose] = useState();
   const [campaignId, setCampaignId] = useState(props.route.params.campaignId);
+  const [error, setError] = useState();
 
   const dataRecipient = {
     update: story,
@@ -30,6 +32,10 @@ const FundraiseUpdate = props => {
     update: wdPurpose,
     amount: amount,
   };
+
+  useEffect(() => {
+    setError(props.error);
+  }, [props.error]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
@@ -115,6 +121,7 @@ const FundraiseUpdate = props => {
               />
             </View>
           )}
+          {error !== null ? <Text style={styles.errorMsg}>{error}</Text> : null}
         </View>
       </ScrollView>
       <Footer
@@ -127,7 +134,11 @@ const FundraiseUpdate = props => {
   );
 };
 
-export default FundraiseUpdate;
+const reduxState = state => ({
+  error: state.taliKasih.error,
+});
+
+export default connect(reduxState, null)(FundraiseUpdate);
 
 const styles = StyleSheet.create({
   container: {
@@ -175,6 +186,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     elevation: 5,
     textAlignVertical: 'top',
+    marginBottom: 15,
   },
   textInput: {
     height: hp('6.5%'),
@@ -188,5 +200,10 @@ const styles = StyleSheet.create({
   },
   selectedContainer: {
     marginTop: 10,
+  },
+  errorMsg: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2%'),
+    color: 'red',
   },
 });

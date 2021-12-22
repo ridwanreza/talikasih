@@ -10,9 +10,12 @@ const CardDonation = props => {
     <View style={styles.container}>
       <View style={styles.arrange}>
         <View style={styles.donatorContainer}>
-          <Image source={{uri: props.data.user.image}} style={styles.avatar} />
+          <Image
+            source={{uri: props.data.user.image.replace(/\s+/g, '')}}
+            style={styles.avatar}
+          />
           <View style={{marginLeft: 10}}>
-            <Text style={styles.amount}>{`Rp. ${props.data.amount}`}</Text>
+            <Text style={styles.amount}>{`${props.data.jumlahDonasi}`}</Text>
             <Text style={styles.donator}>{props.data.name}</Text>
           </View>
         </View>

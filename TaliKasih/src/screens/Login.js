@@ -17,6 +17,10 @@ import Logo from '../assets/images/logo_vertical.png';
 import Google from '../assets/images/Google.png';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import {connect} from 'react-redux';
 
 const Login = props => {
@@ -28,6 +32,8 @@ const Login = props => {
   const [hideNewPass, setHideNewPass] = useState(true);
   const [hideConfirmNewPass, setHideConfirmNewPass] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [error, setError] = useState();
+  const [userInfo, setUserInfo] = useState();
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -89,8 +95,19 @@ const Login = props => {
               <Text style={styles.errorMsg}>{props.error}</Text>
             </View>
           ) : null}
+          {error ? (
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.errorMsg}>{error}</Text>
+            </View>
+          ) : null}
+          {userInfo ? (
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.errorMsg}>{userInfo}</Text>
+            </View>
+          ) : null}
           <TouchableOpacity
             style={styles.forgotButton}
+            disabled={props.forLoading == true ? true : false}
             onPress={() => {
               if (email) {
                 props.forgotPass(dataForgotPass);
@@ -154,6 +171,7 @@ const Login = props => {
                 </View>
                 <TouchableOpacity
                   style={styles.button}
+                  disabled={props.resLoading == true ? true : false}
                   onPress={() => {
                     props.resetPass(dataResetPass, props.forgotToken);
                     if (props.resLoading == false) {
@@ -169,6 +187,7 @@ const Login = props => {
           </Modal>
           <TouchableOpacity
             style={styles.button}
+            disabled={props.isLoading == true ? true : false}
             onPress={() => {
               if (!email || !password) {
                 Alert.alert(
@@ -194,7 +213,37 @@ const Login = props => {
           </View>
         </View>
         <View style={styles.footerContainer}>
-          <TouchableOpacity style={styles.buttonGoogle}>
+          <TouchableOpacity
+            style={styles.buttonGoogle}
+            // onPress={() => {
+            //   setError();
+            //   setUserInfo();
+            //   GoogleSignin.configure({
+            //     webClientId:
+            //       '309200260432-3o9pudoci07ku4kutdko219puomh16vp.apps.googleusercontent.com',
+            //     androidClientId:
+            //       '309200260432-g4c9a2gc5mf7j4j47evdqrh8kt1kdmva.apps.googleusercontent.com',
+            //     offlineAccess: true,
+            //   });
+            //   GoogleSignin.hasPlayServices()
+            //     .then(hasPlayService => {
+            //       if (hasPlayService) {
+            //         GoogleSignin.signIn()
+            //           .then(userInfo => {
+            //             console.log(JSON.stringify(userInfo));
+            //             setUserInfo(userInfo);
+            //           })
+            //           .catch(e => {
+            //             console.log('ERROR: ' + JSON.stringify(e));
+            //             setError(e.message);
+            //           });
+            //       }
+            //     })
+            //     .catch(e => {
+            //       console.log('ERROR IS: ' + JSON.stringify(e));
+            //     });
+            // }}
+          >
             <Image source={Google} style={styles.googleIcon} />
             <Text style={styles.googleText}>Continue with Google</Text>
           </TouchableOpacity>

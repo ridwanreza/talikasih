@@ -12,7 +12,10 @@ const CardComment = props => {
   return (
     <View style={styles.container}>
       <View style={styles.arrange}>
-        <Image source={{uri: props.data.user.image}} style={styles.avatar} />
+        <Image
+          source={{uri: props.data.user.image.replace(/\s+/g, '')}}
+          style={styles.avatar}
+        />
         <View style={{marginLeft: 15}}>
           <Text style={styles.commentator}>{props.data.user.name}</Text>
           <Text style={styles.time}>{props.data.commentTime}</Text>

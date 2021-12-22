@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import {Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import AppStack from './src/navigation/AppStack';
 import {LogBox} from 'react-native';
@@ -11,7 +12,24 @@ import storeRedux from './src/redux/store';
 const App = () => {
   return (
     <Provider store={storeRedux}>
-      <NavigationContainer>
+      <NavigationContainer
+        linking={{
+          prefixes: ['https://talikasih.com/'],
+          enabled: true,
+          config: {
+            screens: {
+              CampaignDetails: {
+                path: 'campaigndetails/:id',
+                parse: {
+                  id: id => {
+                    return `${id}`;
+                  },
+                },
+              },
+            },
+          },
+        }}
+        fallback={<Text>Loading...</Text>}>
         <AppStack />
       </NavigationContainer>
     </Provider>

@@ -10,6 +10,7 @@ const FooterButton = props => {
   return (
     <TouchableOpacity
       style={styles.container}
+      disabled={props.loading == true ? true : false}
       onPress={() => {
         if (
           props.isResetPass == false &&
@@ -50,11 +51,15 @@ const FooterButton = props => {
   );
 };
 
+const reduxState = state => ({
+  loading: state.auth.isLoading,
+});
+
 const reduxDispatch = dispatch => ({
   updateUser: (a, b) => dispatch({type: 'UPDATE_USER', data: a, navigation: b}),
 });
 
-export default connect(null, reduxDispatch)(FooterButton);
+export default connect(reduxState, reduxDispatch)(FooterButton);
 
 const styles = StyleSheet.create({
   container: {

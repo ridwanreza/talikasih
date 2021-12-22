@@ -128,7 +128,7 @@ const AppStack = props => {
                 );
               },
             }}
-            name="Campaign Details"
+            name="CampaignDetails"
             component={CampaignDetails}
           />
           <Stack.Screen

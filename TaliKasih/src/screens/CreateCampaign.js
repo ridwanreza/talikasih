@@ -92,6 +92,19 @@ const CreateCampaign = props => {
   };
 
   useEffect(() => {
+    if (props.dataCampaign !== null) {
+      setImg();
+      setRawImage();
+      setTitle();
+      setGoal();
+      setPickDate();
+      setStory();
+      setCategory();
+      setCategoryId();
+    }
+  }, [props.dataCampaign]);
+
+  useEffect(() => {
     if (props.campaignId !== null) {
       setImg(props.detail.image);
       setRawImage(props.detail.image);
@@ -99,6 +112,7 @@ const CreateCampaign = props => {
       setGoal(props.detail.goal);
       setPickDate(moment(props.detail.dueDate).format('YYYY/MM/DD'));
       setStory(props.detail.story);
+      setCategoryId(props.detail.categoryId);
       switch (props.detail.categoryId) {
         case 1:
           setCategory('Disability');
@@ -128,20 +142,7 @@ const CreateCampaign = props => {
           break;
       }
     }
-  }, [props.campaignId]);
-
-  useEffect(() => {
-    if (props.dataCampaign !== null) {
-      setImg();
-      setRawImage();
-      setTitle();
-      setGoal();
-      setPickDate();
-      setStory();
-      setCategory();
-      setCategoryId();
-    }
-  }, [props.dataCampaign]);
+  }, [props.detail]);
 
   if (props.token === null) {
     return <Auth navigation={props.navigation} />;
@@ -196,7 +197,7 @@ const CreateCampaign = props => {
             rowTextForSelection={(item, index) => {
               return item.name;
             }}
-            defaultButtonText={'Select campaign category'}
+            defaultButtonText={category ? category : 'Select campaign category'}
             dropdownIconPosition={'right'}
             buttonStyle={styles.dropDownContainer}
             buttonTextStyle={styles.dropDownText}
@@ -248,6 +249,9 @@ const CreateCampaign = props => {
             value={story}
             onChangeText={value => setStory(value)}
           />
+          {props.error !== null ? (
+            <Text style={styles.errorMsg}>{props.error}</Text>
+          ) : null}
           <Footer
             name={
               props.loading === true
@@ -381,5 +385,11 @@ const styles = StyleSheet.create({
     fontSize: hp('2.8%'),
     color: '#9F9F9F',
     marginRight: 5,
+  },
+  errorMsg: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2%'),
+    color: 'red',
+    marginBottom: 20,
   },
 });

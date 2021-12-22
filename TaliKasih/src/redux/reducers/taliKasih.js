@@ -21,7 +21,9 @@ const initialState = {
   dataDonate: null,
   dataPaymentDetail: null,
   campaignId: null,
+  share: 0,
   error: null,
+  requestDonate: false,
   isLoading: false,
 };
 
@@ -104,6 +106,7 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        dataMyCampaign: [],
         error: action.error,
       };
     case 'GET_MY_DONATION':
@@ -122,6 +125,7 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        dataMyDonation: [],
         error: action.error,
       };
     case 'SEARCH_CAMPAIGN':
@@ -142,6 +146,7 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        dataSearch: null,
         keyword: action.keyword,
         selection: action.selection,
         error: action.error,
@@ -252,11 +257,13 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
+        requestDonate: true,
       };
     case 'CREATE_DONATION_SUCCESS':
       return {
         ...state,
         isLoading: false,
+        requestDonate: false,
         dataDonate: action.dataDonate,
         dataPaymentDetail: action.paymentDetail,
         error: action.error,
@@ -265,6 +272,7 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        requestDonate: false,
         error: action.error,
       };
     case 'EDIT_CAMPAIGN':
@@ -277,12 +285,45 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         dataCampaign: action.data,
+        campaignId: null,
         error: action.error,
       };
     case 'EDIT_CAMPAIGN_FAILED':
       return {
         ...state,
         isLoading: false,
+        error: action.error,
+      };
+    case 'DELETE_CAMPAIGN':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'DELETE_CAMPAIGN_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'DELETE_CAMPAIGN_FAILED':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    case 'SHARE_CAMPAIGN':
+      return {
+        ...state,
+      };
+    case 'SHARE_CAMPAIGN_SUCCESS':
+      return {
+        ...state,
+        share: state.share + 1,
+        error: action.error,
+      };
+    case 'SHARE_CAMPAIGN_FAILED':
+      return {
+        ...state,
         error: action.error,
       };
     case 'SET_CAMPAIGN_ID':
@@ -295,6 +336,12 @@ const taliKasih = (state = initialState, action) => {
         ...state,
         isLoading: false,
         campaignId: action.data,
+      };
+    case 'CLEAR_DONATION':
+      return {
+        ...state,
+        dataDonate: null,
+        dataPaymentDetail: null,
       };
     default:
       return state;

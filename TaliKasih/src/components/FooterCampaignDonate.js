@@ -10,6 +10,7 @@ const FooterButton = props => {
   return (
     <TouchableOpacity
       style={styles.container}
+      disabled={props.loading == true ? true : false}
       onPress={() => {
         if (!props.selected) {
           Alert.alert(
@@ -25,12 +26,16 @@ const FooterButton = props => {
   );
 };
 
+const reduxState = state => ({
+  loading: state.taliKasih.isLoading,
+});
+
 const reduxDispatch = dispatch => ({
   createDonate: (a, b) =>
     dispatch({type: 'CREATE_DONATION', data: a, value: b}),
 });
 
-export default connect(null, reduxDispatch)(FooterButton);
+export default connect(reduxState, reduxDispatch)(FooterButton);
 
 const styles = StyleSheet.create({
   container: {

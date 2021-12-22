@@ -1,5 +1,12 @@
-import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  Share,
+} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,9 +15,34 @@ import Feather from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 
 const FooterCampaignDetail = props => {
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        title: `${props.title}`,
+        message: `${props.url}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+          // props.share(props.id);
+        } else {
+          // shared
+          props.share(props.id);
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        console.log('dismissed');
+      }
+      console.log(result);
+      console.log(result.activityType);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.shareContainer}>
+      <TouchableOpacity style={styles.shareContainer} onPress={onShare}>
         <Feather name="share" style={styles.shareIcon} />
         <Text style={styles.shareText}>SHARE</Text>
       </TouchableOpacity>
@@ -44,7 +76,11 @@ const reduxState = state => ({
   fundRaiseId: state.taliKasih.dataCampaignDetail.userId,
 });
 
-export default connect(reduxState, null)(FooterCampaignDetail);
+const reduxDispatch = dispatch => ({
+  share: a => dispatch({type: 'SHARE_CAMPAIGN', value: a}),
+});
+
+export default connect(reduxState, reduxDispatch)(FooterCampaignDetail);
 
 const styles = StyleSheet.create({
   container: {

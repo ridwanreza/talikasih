@@ -14,6 +14,7 @@ import {
 } from 'react-native-responsive-screen';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Footer from '../components/FooterEditProfile';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 
 const EditProfile = props => {
@@ -26,6 +27,8 @@ const EditProfile = props => {
   const [img, setImg] = useState();
   const [resetPass, setResetPass] = useState(false);
   const [rawImage, setRawImage] = useState();
+  const [hideNewPass, setHideNewPass] = useState(true);
+  const [hideConfirmNewPass, setHideConfirmNewPass] = useState(true);
 
   const option = {
     title: 'Select Poster',
@@ -71,7 +74,7 @@ const EditProfile = props => {
   };
 
   useEffect(() => {
-    if (props.dataUser !== null) {
+    if (props.dataUser) {
       setName(props.dataUser.name);
       setEmail(props.dataUser.email);
       setBankName(props.dataUser.bankName);
@@ -115,24 +118,43 @@ const EditProfile = props => {
                 <Text style={styles.titleInputText}>New Password</Text>
                 <Text style={styles.requiredMark}>*</Text>
               </View>
-              <TextInput
-                style={styles.textInput}
-                placeholder="New Password"
-                value={newPass}
-                secureTextEntry={true}
-                onChangeText={value => setNewPass(value)}
-              />
+              <View style={styles.passContainer}>
+                <TextInput
+                  style={styles.textInputPass}
+                  placeholder="New Password"
+                  value={newPass}
+                  secureTextEntry={hideNewPass ? true : false}
+                  onChangeText={value => setNewPass(value)}
+                />
+                <TouchableOpacity onPress={() => setHideNewPass(!hideNewPass)}>
+                  <Ionicons
+                    name={hideNewPass ? 'eye-off-outline' : 'eye-outline'}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              </View>
               <View style={styles.arrange}>
                 <Text style={styles.titleInputText}>Confirm New Password</Text>
                 <Text style={styles.requiredMark}>*</Text>
               </View>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Confirm New Password"
-                value={confirmNewPass}
-                secureTextEntry={true}
-                onChangeText={value => setConfirmNewPass(value)}
-              />
+              <View style={styles.passContainer}>
+                <TextInput
+                  style={styles.textInputPass}
+                  placeholder="Confirm New Password"
+                  value={confirmNewPass}
+                  secureTextEntry={hideConfirmNewPass ? true : false}
+                  onChangeText={value => setConfirmNewPass(value)}
+                />
+                <TouchableOpacity
+                  onPress={() => setHideConfirmNewPass(!hideConfirmNewPass)}>
+                  <Ionicons
+                    name={
+                      hideConfirmNewPass ? 'eye-off-outline' : 'eye-outline'
+                    }
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           ) : (
             <TouchableOpacity onPress={() => setResetPass(true)}>
@@ -163,6 +185,11 @@ const EditProfile = props => {
             value={`${bankAccNumber}`}
             onChangeText={value => setBankAccNumber(value)}
           />
+          {props.error !== null ? (
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.errorMsg}>{props.error}</Text>
+            </View>
+          ) : null}
         </View>
       </ScrollView>
       <Footer
@@ -231,6 +258,29 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     elevation: 3,
   },
+  textInputPass: {
+    height: hp('5.5%'),
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2%'),
+    color: '#2D2D2D',
+  },
+  icon: {
+    fontSize: hp('3%'),
+    color: '#9F9F9F',
+  },
+  passContainer: {
+    height: hp('5.5%'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FCFCFC',
+    borderRadius: 4,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#1D94A8',
+    paddingHorizontal: 8,
+    elevation: 3,
+    marginBottom: 10,
+  },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -278,5 +328,10 @@ const styles = StyleSheet.create({
     color: '#000000',
     textDecorationLine: 'underline',
     alignSelf: 'flex-end',
+  },
+  errorMsg: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2%'),
+    color: 'red',
   },
 });

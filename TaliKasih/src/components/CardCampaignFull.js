@@ -20,11 +20,15 @@ const CardCampaignFull = ({data, navigation}) => {
         </View>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('Campaign Details', {
+            navigation.navigate('CampaignDetails', {
               campaignId: data.id,
             })
           }>
-          <Text style={styles.campaignTitle}>{data.title}</Text>
+          <Text style={styles.campaignTitle}>
+            {data.title.length > 70
+              ? `${data.title.substr(0, 70)}...`
+              : data.title}
+          </Text>
         </TouchableOpacity>
         <Text style={styles.campaignKeyword}>{`by ${data.user.name}`}</Text>
         <View style={styles.progressContainer}>
@@ -41,8 +45,11 @@ const CardCampaignFull = ({data, navigation}) => {
           <Text style={styles.raisedGoalText}>Goal</Text>
         </View>
         <View style={styles.arrange}>
-          <Text style={styles.raisedValueText}>{`IDR ${data.collected}`}</Text>
-          <Text style={styles.goalValueText}>{`IDR ${data.goal}`}</Text>
+          <Text
+            style={
+              styles.raisedValueText
+            }>{`IDR ${data.jumlahCollected}`}</Text>
+          <Text style={styles.goalValueText}>{`IDR ${data.jumlahGoal}`}</Text>
         </View>
       </View>
     </View>

@@ -37,8 +37,12 @@ const More = props => {
       {token !== null ? (
         <View style={styles.content}>
           <Feather name="log-out" style={styles.iconLogout} />
-          <TouchableOpacity onPress={() => props.logout(props.navigation)}>
-            <Text style={styles.iconLogoutText}>Logout</Text>
+          <TouchableOpacity
+            disabled={props.loading == true ? true : false}
+            onPress={() => props.logout(props.navigation)}>
+            <Text style={styles.iconLogoutText}>
+              {props.loading == true ? 'Logged out...' : 'Logout'}
+            </Text>
           </TouchableOpacity>
         </View>
       ) : null}
@@ -48,6 +52,7 @@ const More = props => {
 
 const reduxState = state => ({
   token: state.auth.token,
+  loading: state.auth.isLoading,
 });
 
 const reduxDispatch = dispatch => ({

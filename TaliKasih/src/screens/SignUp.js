@@ -103,6 +103,7 @@ const SignUp = props => {
           ) : null}
           <TouchableOpacity
             style={styles.button}
+            disabled={props.isLoading == true ? true : false}
             onPress={() => {
               if (!name || !email || !password || !confirmPassword) {
                 Alert.alert(
@@ -121,7 +122,7 @@ const SignUp = props => {
               }
             }}>
             <Text style={styles.buttonText}>
-              {props.isLoading === true ? `Loading...` : `SIGN UP`}
+              {props.isLoading === true ? `Signing up...` : `SIGN UP`}
             </Text>
           </TouchableOpacity>
           <View style={styles.accountContainer}>

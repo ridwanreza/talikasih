@@ -17,7 +17,7 @@ const CardCampaignDetail = props => {
       <Text
         style={
           styles.raisedText
-        }>{`Available funds IDR ${props.data.collected} `}</Text>
+        }>{`Available funds IDR ${props.data.availSaldo} `}</Text>
       <Text
         style={
           styles.raisedText
@@ -33,7 +33,7 @@ const CardCampaignDetail = props => {
       </View>
       <View style={styles.fundRaiserContainer}>
         <Image
-          source={{uri: props.data.user.image}}
+          source={{uri: props.data.user.image.replace(/\s+/g, '')}}
           style={styles.fundRaiserAvatar}
         />
         <View style={{marginLeft: 8}}>
@@ -47,7 +47,7 @@ const CardCampaignDetail = props => {
           <Text style={styles.countText}>Donations</Text>
         </View>
         <View style={styles.countCard}>
-          <Text style={styles.count}>{0}</Text>
+          <Text style={styles.count}>{props.data.share}</Text>
           <Text style={styles.countText}>Share</Text>
         </View>
         <View style={styles.countCard}>

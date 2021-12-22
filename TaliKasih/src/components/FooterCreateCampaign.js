@@ -10,6 +10,7 @@ const FooterButton = props => {
   return (
     <TouchableOpacity
       style={styles.container}
+      disabled={props.loading == true ? true : false}
       onPress={() => {
         if (
           !props.data.image ||
@@ -44,6 +45,10 @@ const FooterButton = props => {
   );
 };
 
+const reduxState = state => ({
+  loading: state.taliKasih.isLoading,
+});
+
 const reduxDispatch = dispatch => ({
   createCampaign: (a, b) =>
     dispatch({type: 'CREATE_CAMPAIGN', data: a, navigation: b}),
@@ -51,7 +56,7 @@ const reduxDispatch = dispatch => ({
     dispatch({type: 'EDIT_CAMPAIGN', data: c, value: d, navigation: e}),
 });
 
-export default connect(null, reduxDispatch)(FooterButton);
+export default connect(reduxState, reduxDispatch)(FooterButton);
 
 const styles = StyleSheet.create({
   container: {

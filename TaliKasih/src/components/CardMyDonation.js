@@ -20,13 +20,13 @@ const CardMyDonation = ({data, navigation}) => {
       </View>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('Campaign Details', {
+          navigation.navigate('CampaignDetails', {
             campaignId: data.campaign.id,
           })
         }>
         <Text style={styles.campaignTitle}>{data.campaign.title}</Text>
       </TouchableOpacity>
-      <Text style={styles.donationValueText}>{`Rp. ${data.amount}`}</Text>
+      <Text style={styles.donationValueText}>{`${data.jumlahDonasi}`}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.donationMessage}>{`"${data.message}"`}</Text>
       </ScrollView>

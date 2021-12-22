@@ -100,10 +100,8 @@ function* getTokenLatest() {
     const token = yield getToken();
     if (token !== null) {
       yield put({type: 'GET_TOKEN_SUCCESS', token: token});
-      console.log('Get Token Successfully');
     } else if (token === null) {
       yield put({type: 'GET_TOKEN_NULL', token: token});
-      console.log('Token null');
     }
   } catch (err) {
     console.log(err);

@@ -10,6 +10,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Linking,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -29,6 +30,31 @@ const CampaignDetails = props => {
   const [comment, setComment] = useState();
   const [id, setId] = useState();
   const [isModalManageVisible, setIsModalManageVisible] = useState(false);
+  const [processing, setProcessing] = useState(true);
+  const [url, setUrl] = useState(null);
+
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      // Get the deep link used to open the app
+      const initialUrl = await Linking.getInitialURL();
+      console.log('initial ', initialUrl);
+
+      // The setTimeout is just for testing purpose
+      setTimeout(() => {
+        setUrl(initialUrl);
+        setProcessing(false);
+      }, 1000);
+    };
+
+    Linking.addEventListener('url', e => {
+      let a = e.url.split('=');
+      console.log('e ', a[1]);
+    });
+
+    getUrlAsync();
+  }, []);
+
+  console.log(url);
 
   const toggleModalManage = () => {
     setIsModalManageVisible(!isModalManageVisible);
@@ -104,7 +130,10 @@ const CampaignDetails = props => {
               <TouchableOpacity>
                 <Text style={styles.modalContentText}>Close Campaign</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  props.deleteCampaign(id);
+                }}>
                 <Text style={styles.modalContentDelete}>Delete</Text>
               </TouchableOpacity>
             </View>
@@ -187,7 +216,13 @@ const CampaignDetails = props => {
           />
         </View>
       </ScrollView>
-      <Footer navigation={props.navigation} token={props.token} id={id} />
+      <Footer
+        navigation={props.navigation}
+        token={props.token}
+        id={id}
+        title={props.detail.title}
+        url={url !== null ? url : 'https://talikasih.com/campaigndetails'}
+      />
     </View>
   );
 };
@@ -203,6 +238,7 @@ const reduxState = state => ({
   dataUser: state.auth.dataUser,
   loading: state.taliKasih.isLoading,
   token: state.auth.token,
+  onShare: state.taliKasih.share,
 });
 
 const reduxDispatch = dispatch => ({
@@ -212,6 +248,7 @@ const reduxDispatch = dispatch => ({
     dispatch({type: 'CREATE_COMMENT', data: c, value: d}),
   setCampaignId: (e, f) =>
     dispatch({type: 'SET_CAMPAIGN_ID', data: e, navigation: f}),
+  deleteCampaign: g => dispatch({type: 'DELETE_CAMPAIGN', value: g}),
 });
 
 export default connect(reduxState, reduxDispatch)(CampaignDetails);

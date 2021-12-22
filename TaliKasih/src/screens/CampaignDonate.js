@@ -24,7 +24,7 @@ const Toast = ({visible, message}) => {
     ToastAndroid.showWithGravityAndOffset(
       message,
       ToastAndroid.LONG,
-      ToastAndroid.BOTTOM,
+      ToastAndroid.CENTER,
       25,
       50,
     );
@@ -64,11 +64,14 @@ const CampaignDonate = props => {
   };
 
   useEffect(() => {
-    if (props.dataDonate !== null) {
+    if (props.dataPaymentDetail !== null) {
       setAccNum(props.dataPaymentDetail.va_numbers[0].va_number);
-      setAmount(props.dataDonate.amount);
     }
-  }, [props.dataDonate]);
+  }, [props.dataPaymentDetail]);
+
+  useEffect(() => {
+    props.clearDonation();
+  }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
@@ -154,15 +157,17 @@ const CampaignDonate = props => {
             <MCIcons name="bank" style={styles.iconBank} />
             <Text style={styles.iconText}>Bank Transfer</Text>
           </TouchableOpacity>
-          {isSelected && props.dataDonate !== null ? (
+          {isSelected && props.dataPaymentDetail !== null ? (
             <View style={styles.transferInfoContainer}>
               <Text style={styles.transferText}>Transfer to</Text>
               <View style={styles.arrangeTransfer}>
                 <View>
-                  <Text style={styles.transferInfo}>Account Number</Text>
+                  <Text style={styles.transferInfo}>
+                    Virtual Account Number
+                  </Text>
                   <Text style={styles.transferInfoValue}>{accNum}</Text>
                 </View>
-                <Toast visible={visibleToast} message="Acc Number copied!" />
+                <Toast visible={visibleToast} message="VA Number copied!" />
                 <TouchableOpacity
                   onPress={() => {
                     Clipboard.setString(accNum);
@@ -179,12 +184,14 @@ const CampaignDonate = props => {
                 <View>
                   <Text style={styles.transferInfo}>Total Amount</Text>
                   <Text
-                    style={styles.transferInfoValue}>{`Rp. ${amount}`}</Text>
+                    style={
+                      styles.transferInfoValue
+                    }>{`Rp. ${props.dataPaymentDetail.gross_amount}`}</Text>
                 </View>
                 <Toast visible={visibleAmountToast} message="Amount copied!" />
                 <TouchableOpacity
                   onPress={() => {
-                    Clipboard.setString(amount);
+                    Clipboard.setString(props.dataPaymentDetail.gross_amount);
                     handleButtonAmtPress();
                   }}>
                   <Text style={styles.copyText}>COPY</Text>
@@ -192,10 +199,15 @@ const CampaignDonate = props => {
               </View>
             </View>
           ) : null}
+          {props.error !== null ? (
+            <View style={{marginVertical: 15}}>
+              <Text style={styles.errorMsg}>{props.error}</Text>
+            </View>
+          ) : null}
         </View>
       </ScrollView>
       <Footer
-        name={props.loading == true ? 'Loading...' : 'DONATE'}
+        name={props.requestDonate == true ? 'Loading...' : 'DONATE'}
         data={dataDonate}
         selected={isSelected}
         campaignId={campaignId}
@@ -209,9 +221,15 @@ const reduxState = state => ({
   loading: state.taliKasih.isLoading,
   dataDonate: state.taliKasih.dataDonate,
   dataPaymentDetail: state.taliKasih.dataPaymentDetail,
+  requestDonate: state.taliKasih.requestDonate,
+  error: state.taliKasih.error,
 });
 
-export default connect(reduxState, null)(CampaignDonate);
+const reduxDispatch = dispatch => ({
+  clearDonation: () => dispatch({type: 'CLEAR_DONATION'}),
+});
+
+export default connect(reduxState, reduxDispatch)(CampaignDonate);
 
 const styles = StyleSheet.create({
   container: {
@@ -325,5 +343,10 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontFamily: 'Nunito-Regular',
     color: '#2D2D2D',
+  },
+  errorMsg: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: hp('2%'),
+    color: 'red',
   },
 });

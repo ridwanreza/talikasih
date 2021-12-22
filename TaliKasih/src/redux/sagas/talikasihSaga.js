@@ -325,6 +325,8 @@ function* createDonation(action) {
         paymentDetail: resCampaign.data.paymentDetail,
         error: null,
       });
+      console.log(resCampaign.data.dataDonate);
+      console.log(resCampaign.data.paymentDetail);
     }
   } catch (err) {
     console.log(err);
@@ -364,6 +366,54 @@ function* editCampaign(action) {
   }
 }
 
+function* deleteCampaign(action) {
+  try {
+    const token = yield getToken();
+
+    const resCampaign = yield axios({
+      method: 'DELETE',
+      url: `https://api-talikasih.herokuapp.com/deleteCampaign/${action.value}`,
+      headers: {
+        access_token: token,
+      },
+    });
+    if (resCampaign && resCampaign.data) {
+      yield put({
+        type: 'DELETE_CAMPAIGN_SUCCESS',
+        error: null,
+      });
+      action.navigation.navigate('Main', {screen: 'Donate'});
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'DELETE_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
+function* onShare(action) {
+  try {
+    const resShare = yield axios({
+      method: 'PATCH',
+      url: `https://api-talikasih.herokuapp.com/discover/count/${action.value}`,
+    });
+    if (resShare && resShare.data) {
+      yield put({
+        type: 'SHARE_CAMPAIGN_SUCCESS',
+        error: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: 'SHARE_CAMPAIGN_FAILED',
+      error: err.response.data.errors,
+    });
+  }
+}
+
 function* taliKasihSaga() {
   yield takeLatest('GET_CAMPAIGN', getCampaign);
   yield takeLatest('GET_CAMPAIGN_DETAIL', getCampaignDetail);
@@ -379,7 +429,9 @@ function* taliKasihSaga() {
   yield takeLatest('UPDATE_CAMPAIGN_PROGRESS', updateCampaignProgress);
   yield takeLatest('CREATE_DONATION', createDonation);
   yield takeLatest('EDIT_CAMPAIGN', editCampaign);
+  yield takeLatest('DELETE_CAMPAIGN', deleteCampaign);
   yield takeLatest('SET_CAMPAIGN_ID', setCampaignId);
+  yield takeLatest('SHARE_CAMPAIGN', onShare);
 }
 
 export default taliKasihSaga;
