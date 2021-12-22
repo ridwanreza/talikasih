@@ -51,6 +51,9 @@ function* getCampaignDetail(action) {
         comment: resCampaign.data.komen,
         related: resCampaign.data.related,
         remainingTime: resCampaign.data.remainingTime,
+        goal: resCampaign.data.jumlahGoal,
+        collected: resCampaign.data.jumlahCollected,
+        availFunds: resCampaign.data.jumlahAvailSaldo,
         error: null,
       });
     }

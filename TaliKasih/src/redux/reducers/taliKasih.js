@@ -8,6 +8,9 @@ const initialState = {
   dataComment: [],
   dataRelated: [],
   dataRemainingTime: null,
+  goal: '',
+  collected: '',
+  availFunds: '',
   dataMyCampaign: [],
   dataMyDonation: [],
   dataSearch: null,
@@ -64,6 +67,9 @@ const taliKasih = (state = initialState, action) => {
         dataComment: action.comment,
         dataRelated: action.related,
         dataRemainingTime: action.remainingTime,
+        goal: action.goal,
+        collected: action.collected,
+        availFunds: action.availFunds,
         error: action.error,
       };
     case 'GET_CAMPAIGN_DETAIL_FAILED':

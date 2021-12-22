@@ -54,8 +54,6 @@ const CampaignDetails = props => {
     getUrlAsync();
   }, []);
 
-  console.log(url);
-
   const toggleModalManage = () => {
     setIsModalManageVisible(!isModalManageVisible);
   };
@@ -99,6 +97,9 @@ const CampaignDetails = props => {
               data={props.detail}
               donator={props.detailDonations}
               remainingTime={props.dataRemainingTime}
+              goal={props.goal}
+              collected={props.collected}
+              availFunds={props.availFunds}
             />
           </View>
         </View>
@@ -234,6 +235,9 @@ const reduxState = state => ({
   detailComments: state.taliKasih.dataComment,
   dataRelated: state.taliKasih.dataRelated,
   dataRemainingTime: state.taliKasih.dataRemainingTime,
+  goal: state.taliKasih.goal,
+  collected: state.taliKasih.collected,
+  availFunds: state.taliKasih.availFunds,
   dataMyComment: state.taliKasih.dataMyComment,
   dataUser: state.auth.dataUser,
   loading: state.taliKasih.isLoading,

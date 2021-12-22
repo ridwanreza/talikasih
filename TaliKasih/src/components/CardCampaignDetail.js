@@ -13,15 +13,13 @@ const CardCampaignDetail = props => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.raised}>{`IDR ${props.data.collected}`}</Text>
+      <Text style={styles.raised}>{`IDR ${props.collected}`}</Text>
       <Text
         style={
           styles.raisedText
-        }>{`Available funds IDR ${props.data.availSaldo} `}</Text>
+        }>{`Available funds IDR ${props.availFunds} `}</Text>
       <Text
-        style={
-          styles.raisedText
-        }>{`Raised from IDR ${props.data.goal} goal`}</Text>
+        style={styles.raisedText}>{`Raised from IDR ${props.goal} goal`}</Text>
       <View style={styles.progressContainer}>
         <ProgressBar
           progress={props.data.collected / props.data.goal}
