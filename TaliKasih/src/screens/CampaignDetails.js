@@ -40,15 +40,18 @@ const CampaignDetails = props => {
       console.log('initial ', initialUrl);
 
       // The setTimeout is just for testing purpose
-      setTimeout(() => {
-        setUrl(initialUrl);
-        setProcessing(false);
-      }, 1000);
+      // setTimeout(() => {
+      //   setUrl(initialUrl);
+      //   setProcessing(false);
+      // }, 1000);
     };
 
     Linking.addEventListener('url', e => {
-      let a = e.url.split('=');
-      console.log('e ', a[1]);
+      //let a = e.url.split('=');
+      let campaignId = e.url.split('/')[4];
+      props.getCampaignDetail(campaignId);
+      setId(campaignId);
+      console.log('id ', campaignId);
     });
 
     getUrlAsync();
@@ -222,7 +225,7 @@ const CampaignDetails = props => {
         token={props.token}
         id={id}
         title={props.detail.title}
-        url={url !== null ? url : 'https://talikasih.com/campaigndetails'}
+        url={`https://talikasih.com/campaigndetails/${id}`}
       />
     </View>
   );
