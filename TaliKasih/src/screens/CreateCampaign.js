@@ -142,7 +142,9 @@ const CreateCampaign = props => {
           break;
       }
     }
-  }, [props.detail]);
+  }, [props.campaignId]);
+
+  console.log(props.error);
 
   if (props.token === null) {
     return <Auth navigation={props.navigation} />;

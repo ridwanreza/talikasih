@@ -132,7 +132,7 @@ const CampaignDetails = props => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  props.deleteCampaign(id);
+                  props.deleteCampaign(id, props.navigation);
                 }}>
                 <Text style={styles.modalContentDelete}>Delete</Text>
               </TouchableOpacity>
@@ -248,7 +248,8 @@ const reduxDispatch = dispatch => ({
     dispatch({type: 'CREATE_COMMENT', data: c, value: d}),
   setCampaignId: (e, f) =>
     dispatch({type: 'SET_CAMPAIGN_ID', data: e, navigation: f}),
-  deleteCampaign: g => dispatch({type: 'DELETE_CAMPAIGN', value: g}),
+  deleteCampaign: (g, h) =>
+    dispatch({type: 'DELETE_CAMPAIGN', value: g, navigation: h}),
 });
 
 export default connect(reduxState, reduxDispatch)(CampaignDetails);
