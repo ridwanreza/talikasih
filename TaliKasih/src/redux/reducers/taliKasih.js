@@ -309,6 +309,7 @@ const taliKasih = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        dataCampaign: null,
         error: action.error,
       };
     case 'DELETE_CAMPAIGN_FAILED':

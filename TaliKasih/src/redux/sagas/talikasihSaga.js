@@ -385,7 +385,7 @@ function* deleteCampaign(action) {
         type: 'DELETE_CAMPAIGN_SUCCESS',
         error: null,
       });
-      action.navigation.navigate('Main', {screen: 'Donate'});
+      action.navigation.push('Main', {screen: 'Donate'});
     }
   } catch (err) {
     console.log(err);

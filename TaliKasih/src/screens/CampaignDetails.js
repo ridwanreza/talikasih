@@ -135,10 +135,16 @@ const CampaignDetails = props => {
                 <Text style={styles.modalContentText}>Close Campaign</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                disabled={props.loading == true ? true : false}
                 onPress={() => {
                   props.deleteCampaign(id, props.navigation);
+                  if (props.loading == false) {
+                    toggleModalManage();
+                  }
                 }}>
-                <Text style={styles.modalContentDelete}>Delete</Text>
+                <Text style={styles.modalContentDelete}>
+                  {props.loading == true ? 'Deleting...' : 'Delete'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
