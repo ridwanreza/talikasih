@@ -9,7 +9,12 @@ import ProgressBar from 'react-native-progress/Bar';
 const CardCampaignFull = ({data, navigation}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('CampaignDetails', {
+            campaignId: data.id,
+          })
+        }>
         <Image source={{uri: data.image}} style={styles.campaignPoster} />
       </TouchableOpacity>
       <View style={styles.contentContainer}>

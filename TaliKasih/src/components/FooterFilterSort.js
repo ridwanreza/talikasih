@@ -8,28 +8,27 @@ import {connect} from 'react-redux';
 
 const FooterFilterSort = props => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          if (!props.data.category && !props.data.sort) {
-            props.setFilter(false);
-            props.navigation.navigate('Main');
-          } else if (!props.data.category || !props.data.sort) {
-            Alert.alert('TaliKasih', 'Please select category and sort by');
-          } else {
-            props.setFilter(true);
-            props.filterCampaign(
-              props.data.category,
-              props.data.sort,
-              props.navigation,
-            );
-          }
-        }}>
-        <Text style={styles.buttonText}>
-          {props.loading ? 'FILTERING...' : 'FILTER'}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        if (!props.data.category && !props.data.sort) {
+          props.setFilter(false);
+          props.navigation.navigate('Main', {screen: 'Donate'});
+        } else if (!props.data.category || !props.data.sort) {
+          Alert.alert('TaliKasih', 'Please select category and sort by');
+        } else {
+          props.setFilter(true);
+          props.filterCampaign(
+            props.data.category,
+            props.data.sort,
+            props.navigation,
+          );
+        }
+      }}>
+      <Text style={styles.buttonText}>
+        {props.loading ? 'FILTERING...' : 'FILTER'}
+      </Text>
+    </TouchableOpacity>
   );
 };
 

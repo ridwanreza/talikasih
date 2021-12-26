@@ -328,8 +328,6 @@ function* createDonation(action) {
         paymentDetail: resCampaign.data.paymentDetail,
         error: null,
       });
-      console.log(resCampaign.data.dataDonate);
-      console.log(resCampaign.data.paymentDetail);
     }
   } catch (err) {
     console.log(err);

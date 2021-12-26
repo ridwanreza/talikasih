@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -9,6 +9,10 @@ import FooterMyDonation from '../components/FooterMyDonation';
 import {connect} from 'react-redux';
 
 const MyDonation = props => {
+  useEffect(() => {
+    props.getMyDonation();
+  }, [props.dataDonate]);
+
   return (
     <View style={{flex: 1, backgroundColor: '#FAF8F3'}}>
       <View style={styles.container}>
@@ -33,10 +37,15 @@ const MyDonation = props => {
 };
 
 const reduxState = state => ({
+  dataDonate: state.taliKasih.dataDonate,
   dataMyDonation: state.taliKasih.dataMyDonation,
 });
 
-export default connect(reduxState, null)(MyDonation);
+const reduxDispatch = dispatch => ({
+  getMyDonation: () => dispatch({type: 'GET_MY_DONATION'}),
+});
+
+export default connect(reduxState, reduxDispatch)(MyDonation);
 
 const styles = StyleSheet.create({
   container: {

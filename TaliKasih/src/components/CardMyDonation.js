@@ -24,7 +24,7 @@ const CardMyDonation = ({data, navigation}) => {
             campaignId: data.campaign.id,
           })
         }>
-        <Text style={styles.campaignTitle}>{data.campaign.title}</Text>
+        <Text style={styles.campaignTitle}>{data.campaign?.title}</Text>
       </TouchableOpacity>
       <Text style={styles.donationValueText}>{`${data.jumlahDonasi}`}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>

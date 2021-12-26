@@ -88,7 +88,9 @@ const CampaignDonate = props => {
             keyboardType="numeric"
             editable={isSelected ? false : true}
             value={amount !== undefined ? `${amount}` : null}
-            onChangeText={value => setAmount(value)}
+            onChangeText={value => {
+              setAmount(value);
+            }}
           />
           <View style={styles.arrange}>
             <Text style={styles.titleInputText}>Name</Text>
@@ -162,9 +164,7 @@ const CampaignDonate = props => {
               <Text style={styles.transferText}>Transfer to</Text>
               <View style={styles.arrangeTransfer}>
                 <View>
-                  <Text style={styles.transferInfo}>
-                    Virtual Account Number
-                  </Text>
+                  <Text style={styles.transferInfo}>BNI VA Number</Text>
                   <Text style={styles.transferInfoValue}>{accNum}</Text>
                 </View>
                 <Toast visible={visibleToast} message="VA Number copied!" />

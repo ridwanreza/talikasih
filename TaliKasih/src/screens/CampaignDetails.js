@@ -30,24 +30,21 @@ const CampaignDetails = props => {
   const [comment, setComment] = useState();
   const [id, setId] = useState();
   const [isModalManageVisible, setIsModalManageVisible] = useState(false);
-  const [processing, setProcessing] = useState(true);
   const [url, setUrl] = useState(null);
+
+  useEffect(() => {
+    props.getCampaignDetail(props.route.params.campaignId);
+    setId(props.route.params.campaignId);
+  }, [props.dataMyComment]);
 
   useEffect(() => {
     const getUrlAsync = async () => {
       // Get the deep link used to open the app
       const initialUrl = await Linking.getInitialURL();
       console.log('initial ', initialUrl);
-
-      // The setTimeout is just for testing purpose
-      // setTimeout(() => {
-      //   setUrl(initialUrl);
-      //   setProcessing(false);
-      // }, 1000);
     };
 
     Linking.addEventListener('url', e => {
-      //let a = e.url.split('=');
       let campaignId = e.url.split('/')[4];
       props.getCampaignDetail(campaignId);
       setId(campaignId);
@@ -61,13 +58,12 @@ const CampaignDetails = props => {
     setIsModalManageVisible(!isModalManageVisible);
   };
 
-  useEffect(() => {
-    props.getCampaignDetail(props.route.params.campaignId);
-    setId(props.route.params.campaignId);
-  }, [props.dataMyComment]);
-
   const dataComment = {
     comment: comment,
+  };
+
+  const dataClose = {
+    status: 'closed',
   };
 
   if (props.loading === true) {
@@ -131,7 +127,10 @@ const CampaignDetails = props => {
                 }}>
                 <Text style={styles.modalContentText}>Edit</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  props.closeCampaign(dataClose, id, props.navigation);
+                }}>
                 <Text style={styles.modalContentText}>Close Campaign</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -194,8 +193,12 @@ const CampaignDetails = props => {
             style={styles.postButton}
             onPress={() => {
               if (props.token !== null) {
-                props.createComment(dataComment, id);
-                setComment('');
+                if (!comment) {
+                  Alert.alert('TaliKasih', 'Please fill in comment first!');
+                } else if (comment) {
+                  props.createComment(dataComment, id);
+                  setComment('');
+                }
               } else if (props.token === null) {
                 Alert.alert('TaliKasih', 'Please login or sign up first!');
               }
@@ -263,6 +266,8 @@ const reduxDispatch = dispatch => ({
     dispatch({type: 'SET_CAMPAIGN_ID', data: e, navigation: f}),
   deleteCampaign: (g, h) =>
     dispatch({type: 'DELETE_CAMPAIGN', value: g, navigation: h}),
+  closeCampaign: (i, j, k) =>
+    dispatch({type: 'EDIT_CAMPAIGN', data: i, value: j, navigation: k}),
 });
 
 export default connect(reduxState, reduxDispatch)(CampaignDetails);

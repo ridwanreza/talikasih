@@ -1,5 +1,6 @@
 const initialState = {
   isLoading: false,
+  isLogout: false,
   dataUser: {},
   error: null,
   token: null,
@@ -49,12 +50,12 @@ const auth = (state = initialState, action) => {
     case 'LOGOUT':
       return {
         ...state,
-        isLoading: true,
+        isLogout: true,
       };
     case 'LOGOUT_SUCCESS':
       return {
         ...state,
-        isLoading: false,
+        isLogout: false,
         token: action.token,
       };
     case 'GET_TOKEN':
@@ -137,6 +138,7 @@ const auth = (state = initialState, action) => {
       return {
         ...state,
         resLoading: false,
+        forgotToken: null,
         error: action.error,
       };
     case 'RESET_PASS_REQUEST_FAILED':

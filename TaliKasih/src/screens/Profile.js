@@ -77,7 +77,13 @@ const Profile = props => {
             style={styles.textInput}
             placeholder="Your Bank Info"
             editable={false}
-            value={`${props.dataUser.bankName} - ${props.dataUser.bankAccount}`}
+            value={`${
+              props.dataUser.bankName !== null ? props.dataUser.bankName : ''
+            } - ${
+              props.dataUser.bankAccount !== null
+                ? props.dataUser.bankAccount
+                : ''
+            }`}
           />
           <TouchableOpacity
             style={styles.button}

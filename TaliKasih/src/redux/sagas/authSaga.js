@@ -200,7 +200,7 @@ function* resetPass(action) {
     console.log(err);
     yield put({
       type: 'RESET_PASS_REQUEST_FAILED',
-      error: err.response.data.errors,
+      error: err.response.data.message,
     });
   }
 }

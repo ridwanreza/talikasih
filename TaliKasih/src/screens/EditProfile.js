@@ -77,8 +77,12 @@ const EditProfile = props => {
     if (props.dataUser) {
       setName(props.dataUser.name);
       setEmail(props.dataUser.email);
-      setBankName(props.dataUser.bankName);
-      setBankAccNumber(props.dataUser.bankAccount);
+      setBankName(
+        props.dataUser.bankName !== null ? props.dataUser.bankName : '',
+      );
+      setBankAccNumber(
+        props.dataUser.bankAccount !== null ? props.dataUser.bankAccount : '',
+      );
       setRawImage(props.dataUser.image.replace(/\s+/g, ''));
       setImg(props.dataUser.image.replace(/\s+/g, ''));
     }

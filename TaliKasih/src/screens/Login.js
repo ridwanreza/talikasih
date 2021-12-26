@@ -32,8 +32,6 @@ const Login = props => {
   const [hideNewPass, setHideNewPass] = useState(true);
   const [hideConfirmNewPass, setHideConfirmNewPass] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [error, setError] = useState();
-  const [userInfo, setUserInfo] = useState();
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -56,6 +54,8 @@ const Login = props => {
   useEffect(() => {
     if (props.forgotToken !== null) {
       toggleModal();
+    } else if (props.forgotToken === null) {
+      setIsModalVisible(false);
     }
   }, [props.forgotToken]);
 
@@ -93,16 +93,6 @@ const Login = props => {
           {props.error !== null ? (
             <View style={{marginBottom: 20}}>
               <Text style={styles.errorMsg}>{props.error}</Text>
-            </View>
-          ) : null}
-          {error ? (
-            <View style={{marginBottom: 20}}>
-              <Text style={styles.errorMsg}>{error}</Text>
-            </View>
-          ) : null}
-          {userInfo ? (
-            <View style={{marginBottom: 20}}>
-              <Text style={styles.errorMsg}>{userInfo}</Text>
             </View>
           ) : null}
           <TouchableOpacity
@@ -169,13 +159,22 @@ const Login = props => {
                     />
                   </TouchableOpacity>
                 </View>
+                {props.error !== null ? (
+                  <View style={{marginBottom: 20}}>
+                    <Text style={styles.errorMsg}>{props.error}</Text>
+                  </View>
+                ) : null}
                 <TouchableOpacity
                   style={styles.button}
                   disabled={props.resLoading == true ? true : false}
                   onPress={() => {
-                    props.resetPass(dataResetPass, props.forgotToken);
-                    if (props.resLoading == false) {
-                      toggleModal();
+                    if (!newPass && !confirmNewPass) {
+                      Alert.alert(
+                        'TaliKasih',
+                        'Please fill the required data!',
+                      );
+                    } else if (newPass && confirmNewPass) {
+                      props.resetPass(dataResetPass, props.forgotToken);
                     }
                   }}>
                   <Text style={styles.buttonText}>
