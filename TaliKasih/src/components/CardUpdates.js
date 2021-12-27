@@ -6,28 +6,6 @@ import {
 } from 'react-native-responsive-screen';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
-import Timeline from 'react-native-timeline-flatlist';
-
-// const dataUpdates = [
-//   {
-//     title: `TODAY`,
-//     description:
-//       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. In faucibus leo etiam cras elit malesuada augue. Sagittis quisque non, nullam facilisis. ',
-//   },
-//   {
-//     title: `YESTERDAY`,
-//     description: `20000000 \nWithdrawal Purpose \nLorem ipsum dolor sit amet, consectetur adipiscing elit. `,
-//   },
-//   {
-//     title: `3 Oktober 2020`,
-//     description: `20000000 \nWithdrawal Purpose \nLorem ipsum dolor sit amet, consectetur adipiscing elit. `,
-//   },
-//   {
-//     title: `30 September 2020`,
-//     description:
-//       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nunc pellentesque enim ultrices nunc. Pretium massa, vel viverra id mi sed sit. ',
-//   },
-// ];
 
 const CardUpdates = props => {
   const [isWithdrawal, setIsWithdrawal] = useState(
@@ -36,19 +14,6 @@ const CardUpdates = props => {
 
   return (
     <View style={styles.container}>
-      {/* <Timeline
-        data={dataUpdates}
-        circleColor="#1D94A8"
-        lineColor="#1D94A8"
-        style={{marginLeft: wp(-15)}}
-        titleStyle={{marginTop: hp(-2)}}
-        descriptionStyle={{
-          backgroundColor: '#FFFFFF',
-          elevation: 1,
-          padding: 10,
-          borderRadius: 4,
-        }}
-      /> */}
       <View style={styles.timelineArrange}>
         <Entypo name="dot-single" style={styles.dot} />
         <Text style={styles.date}>

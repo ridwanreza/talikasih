@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('4%'),
     elevation: 3,
     marginBottom: 15,
+    overflow: 'hidden',
   },
   arrange: {
     flexDirection: 'row',
@@ -51,17 +52,17 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontFamily: 'Nunito-Bold',
-    fontSize: hp('2.2%'),
+    fontSize: hp('2%'),
     color: '#1D94A8',
   },
   time: {
     fontFamily: 'Nunito-Regular',
-    fontSize: hp('2%'),
+    fontSize: hp('1.6%'),
     color: '#9F9F9F',
   },
   donator: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize: hp('2.2%'),
+    fontSize: hp('2%'),
     color: '#000000',
   },
   story: {

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -33,8 +33,6 @@ const FooterCampaignDetail = props => {
         // dismissed
         console.log('dismissed');
       }
-      console.log(result);
-      console.log(result.activityType);
     } catch (error) {
       alert(error.message);
     }

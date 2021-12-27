@@ -10,7 +10,6 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
-  Linking,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -30,29 +29,11 @@ const CampaignDetails = props => {
   const [comment, setComment] = useState();
   const [id, setId] = useState();
   const [isModalManageVisible, setIsModalManageVisible] = useState(false);
-  const [url, setUrl] = useState(null);
 
   useEffect(() => {
     props.getCampaignDetail(props.route.params.campaignId);
     setId(props.route.params.campaignId);
   }, [props.dataMyComment]);
-
-  useEffect(() => {
-    const getUrlAsync = async () => {
-      // Get the deep link used to open the app
-      const initialUrl = await Linking.getInitialURL();
-      console.log('initial ', initialUrl);
-    };
-
-    Linking.addEventListener('url', e => {
-      let campaignId = e.url.split('/')[4];
-      props.getCampaignDetail(campaignId);
-      setId(campaignId);
-      console.log('id ', campaignId);
-    });
-
-    getUrlAsync();
-  }, []);
 
   const toggleModalManage = () => {
     setIsModalManageVisible(!isModalManageVisible);

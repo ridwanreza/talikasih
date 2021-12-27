@@ -7,6 +7,7 @@ import {
   FlatList,
   ScrollView,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -41,6 +42,27 @@ const Home = props => {
   useEffect(() => {
     props.getCampaign();
   }, [props.dataCampaign, props.dataDonate]);
+
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      // Get the deep link used to open the app
+      const initialUrl = await Linking.getInitialURL();
+      console.log('initial ', initialUrl);
+      if (initialUrl !== null) {
+        let id = initialUrl.split('/')[4];
+        props.navigation.navigate('CampaignDetails', {campaignId: id});
+        console.log('initial id', id);
+      }
+    };
+
+    Linking.addEventListener('url', e => {
+      let id = e.url.split('/')[4];
+      props.navigation.navigate('CampaignDetails', {campaignId: id});
+      console.log('id', id);
+    });
+
+    getUrlAsync();
+  }, []);
 
   const renderItem = ({item, index}) => {
     return <Image source={item.img} style={styles.slideImg} />;

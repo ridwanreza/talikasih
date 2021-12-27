@@ -12,8 +12,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {connect} from 'react-redux';
 import Footer from '../components/FooterFundraiseUpdate';
+import formatCurrency from '../constants/formatCurrency';
+import strToInt from '../constants/strToInt';
+import {connect} from 'react-redux';
 
 const FundraiseUpdate = props => {
   const [isRSelected, setIsRSelected] = useState(true);
@@ -30,7 +32,7 @@ const FundraiseUpdate = props => {
 
   const dataWithdrawal = {
     update: wdPurpose,
-    amount: amount,
+    amount: amount ? strToInt(amount) : amount,
   };
 
   useEffect(() => {
@@ -103,7 +105,7 @@ const FundraiseUpdate = props => {
                 placeholder="e.g. 20,000,000"
                 placeholderTextColor="#9F9F9F"
                 keyboardType="numeric"
-                value={amount}
+                value={formatCurrency(amount)}
                 onChangeText={value => setAmount(value)}
               />
               <View style={styles.arrange}>

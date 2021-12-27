@@ -17,6 +17,8 @@ import {
 import Footer from '../components/FooterCampaignDonate';
 import Clipboard from '@react-native-clipboard/clipboard';
 import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import formatCurrency from '../constants/formatCurrency';
+import strToInt from '../constants/strToInt';
 import {connect} from 'react-redux';
 
 const Toast = ({visible, message}) => {
@@ -57,10 +59,10 @@ const CampaignDonate = props => {
   };
 
   const dataDonate = {
-    amount,
-    name,
-    message,
-    method,
+    amount: amount ? strToInt(amount) : amount,
+    name: name,
+    message: message,
+    method: method,
   };
 
   useEffect(() => {
@@ -87,10 +89,8 @@ const CampaignDonate = props => {
             placeholderTextColor="#9F9F9F"
             keyboardType="numeric"
             editable={isSelected ? false : true}
-            value={amount !== undefined ? `${amount}` : null}
-            onChangeText={value => {
-              setAmount(value);
-            }}
+            value={amount !== undefined ? `${formatCurrency(amount)}` : null}
+            onChangeText={value => setAmount(value)}
           />
           <View style={styles.arrange}>
             <Text style={styles.titleInputText}>Name</Text>
@@ -183,10 +183,9 @@ const CampaignDonate = props => {
               <View style={styles.arrangeTransfer}>
                 <View>
                   <Text style={styles.transferInfo}>Total Amount</Text>
-                  <Text
-                    style={
-                      styles.transferInfoValue
-                    }>{`Rp. ${props.dataPaymentDetail.gross_amount}`}</Text>
+                  <Text style={styles.transferInfoValue}>{`Rp. ${formatCurrency(
+                    props.dataPaymentDetail.gross_amount,
+                  )}`}</Text>
                 </View>
                 <Toast visible={visibleAmountToast} message="Amount copied!" />
                 <TouchableOpacity

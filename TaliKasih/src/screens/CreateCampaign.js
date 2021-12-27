@@ -20,6 +20,8 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import Footer from '../components/FooterCreateCampaign';
 import Auth from '../components/Auth';
+import formatCurrency from '../constants/formatCurrency';
+import strToInt from '../constants/strToInt';
 import {connect} from 'react-redux';
 
 const dataCategory = [
@@ -82,15 +84,6 @@ const CreateCampaign = props => {
     });
   }
 
-  const dataCampaign = {
-    image: rawImage,
-    title: title,
-    goal: goal,
-    dueDate: pickDate,
-    story: story,
-    categoryId: categoryId,
-  };
-
   useEffect(() => {
     if (props.dataCampaign !== null) {
       setImg();
@@ -143,6 +136,15 @@ const CreateCampaign = props => {
       }
     }
   }, [props.campaignId]);
+
+  const dataCampaign = {
+    image: rawImage,
+    title: title,
+    goal: goal ? strToInt(goal) : goal,
+    dueDate: pickDate,
+    story: story,
+    categoryId: categoryId,
+  };
 
   if (props.token === null) {
     return <Auth navigation={props.navigation} />;
@@ -214,12 +216,13 @@ const CreateCampaign = props => {
             placeholder="e.g 20,000,000"
             placeholderTextColor="#9F9F9F"
             keyboardType="numeric"
-            value={goal !== undefined ? `${goal}` : null}
+            value={goal !== undefined ? `${formatCurrency(goal)}` : null}
             onChangeText={value => setGoal(value)}
           />
           <View style={styles.arrange}>
             <Text style={styles.titleInputText}>Due Date</Text>
-            <Text style={styles.optional}>(Optional)</Text>
+            {/* <Text style={styles.optional}>(Optional)</Text> */}
+            <Text style={styles.requiredMark}>*</Text>
           </View>
           <Pressable onPress={showDatePicker}>
             <TextInput

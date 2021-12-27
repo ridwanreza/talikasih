@@ -18,7 +18,7 @@ const App = () => {
           enabled: true,
           config: {
             screens: {
-              CampaignDetails: {
+              Main: {
                 path: 'campaigndetails/:id',
                 parse: {
                   id: id => {
@@ -28,8 +28,7 @@ const App = () => {
               },
             },
           },
-        }}
-        fallback={<Text>Loading...</Text>}>
+        }}>
         <AppStack />
       </NavigationContainer>
     </Provider>

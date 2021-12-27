@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   campaignPoster: {
     width: wp('92%'),
     height: hp('25%'),
-    resizeMode: 'stretch',
+    resizeMode: 'cover',
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8,
     overflow: 'hidden',

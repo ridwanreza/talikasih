@@ -65,7 +65,7 @@ export default CardCampaign;
 
 const styles = StyleSheet.create({
   container: {
-    width: wp('65%'),
+    width: wp('68%'),
     height: hp('48%'),
     borderRadius: 8,
     elevation: 3,
@@ -75,15 +75,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   campaignPoster: {
-    width: wp('65%'),
+    width: wp('68%'),
     height: hp('24%'),
-    resizeMode: 'stretch',
+    resizeMode: 'cover',
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8,
     overflow: 'hidden',
   },
   contentContainer: {
-    width: wp('65%'),
+    width: wp('68%'),
     height: hp('24%'),
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -131,12 +131,12 @@ const styles = StyleSheet.create({
     color: '#9F9F9F',
   },
   raisedValueText: {
-    fontSize: hp('2%'),
+    fontSize: hp('1.7%'),
     fontFamily: 'Nunito-SemiBold',
     color: '#1D94A8',
   },
   goalValueText: {
-    fontSize: hp('2%'),
+    fontSize: hp('1.7%'),
     fontFamily: 'Nunito-SemiBold',
     color: '#000000',
   },
