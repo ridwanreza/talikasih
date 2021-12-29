@@ -1,0 +1,23 @@
+image: reactnativecommunity/react-native-android
+
+stages:
+  - test
+  - build
+
+test_awesomeapp_unit:
+  stage: test
+  script:
+    - cd TaliKasih
+    - npm install
+    - npm run test
+
+build_awesomeapp:
+  stage: build
+  script:
+    - cd TaliKasih
+    - npm install
+    - cd android && chmod +x gradlew
+    - ./gradlew assembleRelease
+  artifacts:
+    paths:
+      - TaliKasih/android/app/build/outputs/

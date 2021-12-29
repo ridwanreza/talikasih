@@ -44,7 +44,9 @@ const Profile = props => {
     );
   } else {
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{backgroundColor: '#FAF8F3'}}>
         <View style={styles.container}>
           <Image
             source={

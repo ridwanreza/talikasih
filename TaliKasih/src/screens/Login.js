@@ -300,6 +300,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footerContainer: {
+    height: hp('10%'),
     width: wp('84%'),
     backgroundColor: '#F1EDE4',
     alignItems: 'center',
