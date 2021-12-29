@@ -4,14 +4,14 @@ stages:
   - test
   - build
 
-test_awesomeapp_unit:
+test_TaliKasih_unit:
   stage: test
   script:
     - cd TaliKasih
     - npm install
     - npm run test
 
-build_awesomeapp:
+build_TaliKasih:
   stage: build
   script:
     - cd TaliKasih
